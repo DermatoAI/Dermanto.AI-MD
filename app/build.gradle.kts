@@ -50,4 +50,6 @@ dependencies {
     added library
      */
     ksp(libs.androidx.room.compiler)
+    implementation(libs.converter.gson)
+    implementation(libs.retrofit)
 }
