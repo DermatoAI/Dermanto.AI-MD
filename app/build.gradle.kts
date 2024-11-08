@@ -6,6 +6,7 @@ plugins {
      */
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("org.jetbrains.dokka")
 }
 
 android {
@@ -56,10 +57,34 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.converter.gson)
     implementation(libs.retrofit)
-
     /*
     hilt library for DI
      */
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+}
+
+/*
+configure dokka
+ */
+tasks.register("cleanDocs") {
+    doLast {
+        val docsDir = rootDir.resolve("docs")
+        if (docsDir.exists()) {
+            delete(docsDir)
+        }
+    }
+}
+
+tasks.dokkaHtml.configure {
+    outputDirectory.set(rootDir.resolve("docs"))
+
+    dokkaSourceSets {
+        named("main") {
+            moduleName.set("Dermato.AI")
+            suppressInheritedMembers.set(true)
+            includeNonPublic.set(false)
+        }
+    }
+
 }
