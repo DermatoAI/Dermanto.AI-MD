@@ -53,13 +53,14 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     /*
     added library
+    - room
+    - retrofit
+    - hilt
      */
+    implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.converter.gson)
     implementation(libs.retrofit)
-    /*
-    hilt library for DI
-     */
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 }
