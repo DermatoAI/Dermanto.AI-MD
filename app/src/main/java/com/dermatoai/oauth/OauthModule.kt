@@ -27,7 +27,6 @@ class OauthModule {
             Uri.parse("https://accounts.google.com/.well-known/openid-configuration")
     }
 
-
     @Provides
     @Singleton
     fun appAuthConfig(): AuthorizationServiceConfiguration =
