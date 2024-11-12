@@ -13,6 +13,11 @@ android {
     namespace = "com.dermatoai"
     compileSdk = 35
 
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.dermatoai"
         minSdk = 29
@@ -21,6 +26,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders["appAuthRedirectScheme"] = "com.googleusercontent.apps.dermato_ai"
+
+        buildConfigField(
+            "String",
+            "CLIENT_ID",
+            "\"clientId\""
+        )
     }
 
     buildTypes {
@@ -39,6 +52,8 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+
 }
 
 dependencies {
@@ -63,6 +78,10 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.appauth)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.security.crypto)
+    implementation(libs.kotlinx.coroutines.android)
 }
 
 /*
