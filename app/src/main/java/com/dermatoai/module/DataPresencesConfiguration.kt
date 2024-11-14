@@ -13,7 +13,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SecureDataPreferencesModule {
+class SecureDataPreferencesModule {
+    companion object {
+        private const val USER_PREFERENCES_NAME = "DermatoAI_preference"
+    }
 
     @Singleton
     @Provides
@@ -21,9 +24,7 @@ object SecureDataPreferencesModule {
         context.datastore
 
 
-    private const val USER_PREFERENCES_NAME = "DermatoAI_preference"
     private val Context.datastore: DataStore<Preferences> by preferencesDataStore(
         name = USER_PREFERENCES_NAME
     )
-
 }

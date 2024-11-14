@@ -1,56 +1,41 @@
 package com.dermatoai.oauth
 
-import android.net.Uri
+import android.content.Context
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
 import com.dermatoai.BuildConfig
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationServiceConfiguration
+import java.util.UUID
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class OauthModule {
     companion object {
-        private const val CLIENT_ID: String = BuildConfig.CLIENT_ID
-
-        /*
-        https://idp.example.com/custom-scope
-         */
-        private const val SCOPE = "openid email profile"
-        private val TOKEN_ENDPOINT = Uri.parse("https://oauth2.googleapis.com/token")
-        private val AUTHENTICATION_ENDPOINT =
-            Uri.parse("https://accounts.google.com/o/oauth2/v2/auth")
-        private val REDIRECT_URI =
-            Uri.parse("https://accounts.google.com/.well-known/openid-configuration")
+        private const val WEB_CLIENT_ID: String = BuildConfig.WEB_CLIENT_ID
+        private val NONCE: String = UUID.randomUUID().toString()
     }
-
-    @Provides
-    @Singleton
-    fun appAuthConfig(): AuthorizationServiceConfiguration =
-        AuthorizationServiceConfiguration(AUTHENTICATION_ENDPOINT, TOKEN_ENDPOINT)
-
 
     /*
-        client_id
-        redirect_uri
-        response_type
-        scope
-        code_challenge
-        code_challenge_method
-        state
-        login_hint (op)
+        https://developer.android.com/identity/sign-in/credential-manager-siwg
          */
     @Provides
     @Singleton
-    fun createAuthorizationRequest(config: AuthorizationServiceConfiguration): AuthorizationRequest.Builder {
-        return AuthorizationRequest.Builder(
-            config,
-            CLIENT_ID,
-            AuthorizationRequest.CODE_CHALLENGE_METHOD_S256,
-            REDIRECT_URI
-        ).setScope(SCOPE)
+    fun provideCredentialManager(@ApplicationContext context: Context): CredentialManager {
+        return CredentialManager.create(context)
     }
+
+    @Provides
+    @Singleton
+    fun request(googleIdOption: GetGoogleIdOption): GetCredentialRequest {
+        return GetCredentialRequest.Builder()
+            .addCredentialOption(googleIdOption)
+            .build()
+    }
+
 }

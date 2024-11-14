@@ -7,6 +7,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.dokka")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -33,6 +34,11 @@ android {
             "String",
             "CLIENT_ID",
             "\"clientId\""
+        )
+        buildConfigField(
+            "String",
+            "WEB_CLIENT_ID",
+            "\"webClientId\""
         )
     }
 
@@ -78,10 +84,13 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    implementation(libs.appauth)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.security.crypto)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.play.services.auth)
+    implementation(libs.googleid)
 }
 /*
 configure dokka
