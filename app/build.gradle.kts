@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,7 +9,6 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.dokka")
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -18,7 +19,10 @@ android {
         viewBinding = true
         buildConfig = true
     }
-
+    packaging {
+        @Suppress("DEPRECATION")
+        exclude("META-INF/DEPENDENCIES")
+    }
     defaultConfig {
         applicationId = "com.dermatoai"
         minSdk = 29
@@ -30,25 +34,23 @@ android {
 
         manifestPlaceholders["appAuthRedirectScheme"] = "com.googleusercontent.apps.dermato_ai"
 
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
         buildConfigField(
             "String",
             "CLIENT_ID",
-            "\"clientId\""
+            "\"${properties.getProperty("CLIENT_ID")}\""
         )
         buildConfigField(
             "String",
-            "WEB_CLIENT_ID",
-            "\"webClientId\""
+            "SERVER_CLIENT_ID",
+            "\"${properties.getProperty("SERVER_CLIENT_ID")}\""
         )
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-//            proguardFiles(
-//                getDefaultProguardFile("proguard-android-optimize.txt"),
-//                "proguard-rules.pro"
-//            )
         }
     }
     compileOptions {
@@ -58,8 +60,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-
-
 }
 
 dependencies {
@@ -91,6 +91,7 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.play.services.auth)
     implementation(libs.googleid)
+    implementation(libs.google.api.client)
 }
 /*
 configure dokka
