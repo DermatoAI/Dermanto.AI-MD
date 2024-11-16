@@ -7,28 +7,33 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialException
+import com.dermatoai.BuildConfig
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.json.JsonFactory
+import com.google.api.client.json.gson.GsonFactory
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.qualifiers.ActivityContext
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @Module
 @InstallIn(ActivityComponent::class)
 class GoogleAuthenticationService @Inject constructor(
-    @ActivityContext private val context: Context,
-   private val repository: GoogleAuthenticationRepository,
+    private val repository: GoogleAuthenticationRepository,
     private val credentialManager: CredentialManager
 ) {
     companion object {
         private const val TAG = "GoogleOauth2Service"
     }
 
-    fun doSignIn(request: GetCredentialRequest) {
-        runBlocking {
+    suspend fun doSignIn(context: Context, request: GetCredentialRequest) {
+        withContext(Dispatchers.IO) {
             try {
                 val result = credentialManager.getCredential(
                     request = request,
@@ -42,7 +47,7 @@ class GoogleAuthenticationService @Inject constructor(
     }
 
     private fun handleFailure(error: GetCredentialException) {
-        // Todo create failure handler here
+        println(error.toString())
     }
 
     private fun handleSignIn(result: GetCredentialResponse) {
@@ -52,8 +57,16 @@ class GoogleAuthenticationService @Inject constructor(
                     try {
                         val googleIdTokenCredential =
                             GoogleIdTokenCredential.createFrom(credential.data)
-
-                        repository.saveToken(googleIdTokenCredential.idToken)
+                        val payload: GoogleIdToken.Payload? =
+                            verifyGoogleIdToken(googleIdTokenCredential.idToken)
+                        payload?.let {
+                            with(googleIdTokenCredential) {
+                                val username = displayName
+                                val profilePicture = profilePictureUri
+                                val email = it.email
+                                repository.saveToken(idToken)
+                            }
+                        }
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e(TAG, "Received an invalid google id token response", e)
                     }
@@ -66,5 +79,26 @@ class GoogleAuthenticationService @Inject constructor(
                 Log.e(TAG, "Unexpected type of credential")
             }
         }
+    }
+
+    private fun verifyGoogleIdToken(idTokenString: String): GoogleIdToken.Payload? {
+        val transport = GoogleNetHttpTransport.newTrustedTransport()
+        val jsonFactory: JsonFactory = GsonFactory.getDefaultInstance()
+
+        val verifier = GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+            .setAudience(listOf("${BuildConfig.CLIENT_ID}.apps.googleusercontent.com")) // Replace with your client ID
+            .build()
+
+        try {
+            val idToken: GoogleIdToken? = verifier.verify(idTokenString)
+            if (idToken != null) {
+                return idToken.payload
+            } else {
+                println("Invalid ID token.")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
     }
 }
