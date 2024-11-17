@@ -18,22 +18,22 @@ import androidx.lifecycle.LifecycleOwner
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.qualifiers.ActivityContext
 import java.io.File
 import javax.inject.Inject
 
 @Module
 @InstallIn(ActivityComponent::class)
 class CameraService @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ActivityContext private val context: Context
 ) {
     private lateinit var imageUri: Uri
-    private lateinit var previewView: PreviewView
     private lateinit var imageCapture: ImageCapture
     private var permissionGranted = false
 
-    init {
+    fun setup(previewView: PreviewView) {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
 
@@ -63,7 +63,10 @@ class CameraService @Inject constructor(
         }, ContextCompat.getMainExecutor(context))
     }
 
-    fun requestCameraPermission(activity: ComponentActivity, onPermissionResult: (Boolean) -> Unit) {
+    fun requestCameraPermission(
+        activity: ComponentActivity,
+        onPermissionResult: (Boolean) -> Unit
+    ) {
         val permissionLauncher = activity.registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->

@@ -39,6 +39,10 @@ android {
         properties.load(project.rootProject.file("local.properties").inputStream())
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
