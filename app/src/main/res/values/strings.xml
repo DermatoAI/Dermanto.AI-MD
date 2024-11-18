@@ -3,4 +3,6 @@
     <string name="tagline_image_view_description">Logo of our app</string>
     <string name="sing_up_text">Sign Up</string>
     <string name="ask_to_sign_up_text">Already have an account ?</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
