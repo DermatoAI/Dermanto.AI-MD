@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="31dp"
+    tools:context=".ui.SignInFragment">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/logo_image_view"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="36dp"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ImageView.Circle" />
+
+    <TextView
+        android:id="@+id/tagline_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:text="What’s your birth date?"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo_image_view" />
+
+    <TextView
+        android:id="@+id/text1_text_view"
+        style="@style/Text.Transparent.White"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="This won’t be public"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tagline_text_view" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/month_input_layout"
+        android:layout_width="143dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="20dp"
+        app:boxBackgroundMode="outline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text1_text_view">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Month" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/date_input_layout"
+        android:layout_width="79dp"
+        android:layout_height="68dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="20dp"
+        android:hint="Date"
+        app:layout_constraintStart_toEndOf="@id/month_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/text1_text_view">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/year_input_layout"
+        android:layout_width="79dp"
+        android:layout_height="68dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="20dp"
+        android:hint="Year"
+        app:layout_constraintStart_toEndOf="@id/date_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/text1_text_view">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/text2_text_view"
+        style="@style/Text.Transparent.White"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="By signing up, you agree to the Terms of Service and Privacy Policy, Including Cookie Use. Dermato.Ai may use your contact information, including your email address and phone number for purposes outlined in our Privacy Policy, like keeping your account secure and personalizing our services. Learn more. Others will be able to find you by email or phone number."
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/month_input_layout" />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sign_up_button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginBottom="115dp"
+        android:text="CONTINUE"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
