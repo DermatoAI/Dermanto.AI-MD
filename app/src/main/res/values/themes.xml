@@ -34,4 +34,9 @@
     <style name="Text.Transparent.White">
         <item name="android:textColor">@color/white_70</item>
     </style>
+
+    <style name="TextInput.CustomTextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/accent</item>
+        <item name="boxBackgroundColor">@color/neutral</item>
+    </style>
 </resources>
