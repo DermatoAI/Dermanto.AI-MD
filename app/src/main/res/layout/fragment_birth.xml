@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingHorizontal="31dp"
-    tools:context=".ui.SignInFragment">
+    tools:context=".ui.BirthFragment">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/logo_image_view"
@@ -45,14 +45,18 @@
         android:layout_width="143dp"
         android:layout_height="68dp"
         android:layout_marginTop="20dp"
-        app:boxBackgroundMode="outline"
+        android:hint="Month"
+        app:layout_constraintBottom_toTopOf="@id/text2_text_view"
+        app:layout_constraintEnd_toStartOf="@id/date_input_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text1_text_view">
+        app:layout_constraintTop_toBottomOf="@id/text1_text_view"
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/month_input_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Month" />
+            android:textColor="@color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -62,12 +66,17 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="20dp"
         android:hint="Date"
+        app:layout_constraintBottom_toTopOf="@id/text2_text_view"
+        app:layout_constraintEnd_toStartOf="@id/year_input_layout"
         app:layout_constraintStart_toEndOf="@id/month_input_layout"
-        app:layout_constraintTop_toBottomOf="@id/text1_text_view">
+        app:layout_constraintTop_toBottomOf="@id/text1_text_view"
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/date_input_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -77,12 +86,17 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="20dp"
         android:hint="Year"
+        app:layout_constraintBottom_toTopOf="@id/text2_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/date_input_layout"
-        app:layout_constraintTop_toBottomOf="@id/text1_text_view">
+        app:layout_constraintTop_toBottomOf="@id/text1_text_view"
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/year_input_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -98,7 +112,7 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/sign_up_button"
+        android:id="@+id/continue_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginBottom="115dp"
@@ -107,7 +121,10 @@
         android:textStyle="bold"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text2_text_view"
+        app:layout_constraintVertical_bias="1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

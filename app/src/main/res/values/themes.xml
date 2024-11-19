@@ -31,6 +31,10 @@
         <item name="cornerSize">50%</item> <!-- Makes the corners fully rounded -->
     </style>
 
+    <style name="Text.Transparent" parent="Base.Theme.DermatoAI">
+
+    </style>
+
     <style name="Text.Transparent.White">
         <item name="android:textColor">@color/white_70</item>
     </style>

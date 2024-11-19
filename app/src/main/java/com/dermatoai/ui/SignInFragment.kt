@@ -1,5 +1,74 @@
 package com.dermatoai.ui
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.credentials.GetCredentialRequest
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import com.dermatoai.R
+import com.dermatoai.databinding.FragmentSignInBinding
+import com.dermatoai.oauth.GoogleAuthenticationService
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.security.MessageDigest
+import java.util.UUID
+import javax.inject.Inject
 
-class SignInFragment : Fragment()
+@AndroidEntryPoint
+class SignInFragment : Fragment() {
+    private lateinit var binding: FragmentSignInBinding
+
+    @Inject
+    lateinit var googleSignInService: GoogleAuthenticationService
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSignInBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.googleSignInButton.setOnClickListener {
+            val rawNonce = UUID.randomUUID().toString()
+            val bytes = rawNonce.toByteArray()
+            val md = MessageDigest.getInstance("SHA-256")
+            val digest = md.digest(bytes)
+            val hashedNonce = digest.fold("") { str, byte ->
+                str + "%02x".format(byte)
+            }
+
+            val signInWithGoogleOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false) // true - check if the user has any accounts that have previously been used to sign in to the app
+                .setServerClientId(binding.root.context.getString(R.string.default_web_client_id))
+                .setNonce(hashedNonce)
+                .build()
+
+            val request = GetCredentialRequest.Builder()
+                .addCredentialOption(signInWithGoogleOption)
+                .build()
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                googleSignInService.doSignIn(
+                    binding.root.context,
+                    request,
+                    {
+                        this.launch(Dispatchers.Main) {
+                            binding.signUpButton.findNavController()
+                                .navigate(R.id.action_signInFragment_to_birthFragment)
+                        }
+                    }
+                )
+            }
+        }
+    }
+}
