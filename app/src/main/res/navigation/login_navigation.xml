@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_navigation"
+    app:startDestination="@id/signInFragment">
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.dermatoai.ui.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_birthFragment"
+            app:destination="@id/birthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/birthFragment"
+        android:name="com.dermatoai.ui.BirthFragment"
+        android:label="fragment_birth"
+        tools:layout="@layout/fragment_birth" >
+        <action
+            android:id="@+id/action_birthFragment_to_calledNameFragment"
+            app:destination="@id/calledNameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/calledNameFragment"
+        android:name="com.dermatoai.ui.CalledNameFragment"
+        android:label="fragment_called_name"
+        tools:layout="@layout/fragment_called_name" />
+</navigation>
