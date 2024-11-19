@@ -9,6 +9,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.dokka")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -36,16 +37,6 @@ android {
 
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
-        buildConfigField(
-            "String",
-            "CLIENT_ID",
-            "\"${properties.getProperty("CLIENT_ID")}\""
-        )
-        buildConfigField(
-            "String",
-            "SERVER_CLIENT_ID",
-            "\"${properties.getProperty("SERVER_CLIENT_ID")}\""
-        )
     }
 
     buildTypes {
@@ -72,6 +63,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.material)
     /*
     added library
     - room
@@ -80,19 +75,25 @@ dependencies {
      */
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+
     implementation(libs.converter.gson)
-    implementation(libs.material)
     implementation(libs.retrofit)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.security.crypto)
     implementation(libs.kotlinx.coroutines.android)
+
+
+    implementation(libs.play.services.auth)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
-    implementation(libs.play.services.auth)
     implementation(libs.googleid)
-    implementation(libs.google.api.client)
 }
 /*
 configure dokka
