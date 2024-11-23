@@ -13,6 +13,7 @@
 
 
     <color name="neutral">#2A2D34</color>
+    <color name="neutral_light">#30343A</color>
     <color name="primary">#5C946E</color>
     <color name="primaryDark">#629d75</color>
     <color name="accent">#80C2AF</color>

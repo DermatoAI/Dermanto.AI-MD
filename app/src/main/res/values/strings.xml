@@ -6,6 +6,16 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tag">\@</string>
+    <string name="home_menu_title">Home</string>
+    <string name="form_menu_title">Forum</string>
+    <string name="capture_menu_title">Analyze</string>
+    <string name="appointment_menu_title">Connect</string>
+    <string name="upcoming_title">UPCOMING</string>
+    <string name="finished_title">FINISHED</string>
+    <string name="confidence_score_template">%1$d%%</string>
+    <string name="toolbar_title">Dermato Connect</string>
+    <string name="button_detail_text">DETAIL</string>
+    <string name="button_meet_text">MEET</string>
 
 
     <string-array name="dates">

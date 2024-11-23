@@ -1,9 +1,9 @@
 [versions]
 agp = "8.6.1"
+concurrentFuturesKtx = "1.2.0"
 datastorePreferences = "1.1.1"
 firebaseBom = "33.6.0"
 fragmentKtx = "1.8.5"
-googleApiClient = "1.34.0"
 camerax-version = "1.4.0"
 hiltAndroid = "2.51.1"
 kotlin = "2.0.21"
@@ -13,6 +13,7 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 kotlinxCoroutinesAndroid = "1.7.3"
+lifecycleRuntimeKtx = "2.8.7"
 material = "1.12.0"
 navigationFragmentKtx = "2.8.4"
 playServicesAuth = "21.2.0"
@@ -26,8 +27,11 @@ googleid = "1.1.1"
 
 [libraries]
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax-version" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax-version" }
+androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "camerax-version" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax-version" }
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax-version" }
+androidx-concurrent-futures-ktx = { module = "androidx.concurrent:concurrent-futures-ktx", version.ref = "concurrentFuturesKtx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
@@ -49,6 +53,7 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
