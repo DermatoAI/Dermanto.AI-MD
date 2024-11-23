@@ -2,6 +2,9 @@ package com.dermatoai.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.dermatoai.R
 import com.dermatoai.databinding.ActivityBaseBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -12,6 +15,15 @@ class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBaseBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        with(binding) {
+            setContentView(root)
+
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.base_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            bottomNavigation.setupWithNavController(navController)
+        }
+
     }
+
 }

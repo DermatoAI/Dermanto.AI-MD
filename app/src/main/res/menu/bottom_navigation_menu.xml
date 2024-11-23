@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_menu"
+        android:icon="@drawable/icons8_home"
+        android:title="@string/home_menu_title" />
+    <item
+        android:id="@+id/capture_menu"
+        android:icon="@drawable/icons8_capture"
+        android:title="@string/capture_menu_title" />
+    <item
+        android:id="@+id/appointment_menu"
+        android:icon="@drawable/icons8_appointment"
+        android:title="@string/appointment_menu_title" />
+    <item
+        android:id="@+id/forum_menu"
+        android:icon="@drawable/icons8_people_working_together"
+        android:title="@string/form_menu_title" />
+</menu>

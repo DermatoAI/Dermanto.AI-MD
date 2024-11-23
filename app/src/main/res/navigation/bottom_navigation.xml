@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_navigation"
+    app:startDestination="@id/home_menu">
+    <fragment
+        android:id="@+id/capture_menu"
+        android:name="com.dermatoai.ui.CaptureFragment"
+        android:label="fragment_capture"
+        tools:layout="@layout/fragment_capture" >
+        <action
+            android:id="@+id/action_captureFragment_to_homeFragment"
+            app:destination="@id/home_menu" />
+        <action
+            android:id="@+id/action_captureFragment_to_forumFragment"
+            app:destination="@id/forum_menu" />
+        <action
+            android:id="@+id/action_capture_menu_to_appointmentFragment"
+            app:destination="@id/appointment_menu" />
+    </fragment>
+    <fragment
+        android:id="@+id/home_menu"
+        android:name="com.dermatoai.ui.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_captureFragment"
+            app:destination="@id/capture_menu" />
+        <action
+            android:id="@+id/action_homeFragment_to_forumFragment"
+            app:destination="@id/forum_menu" />
+        <action
+            android:id="@+id/action_home_menu_to_appointmentFragment"
+            app:destination="@id/appointment_menu" />
+    </fragment>
+    <fragment
+        android:id="@+id/forum_menu"
+        android:name="com.dermatoai.ui.ForumFragment"
+        android:label="fragment_forum"
+        tools:layout="@layout/fragment_forum" >
+        <action
+            android:id="@+id/action_forumFragment_to_captureFragment"
+            app:destination="@id/capture_menu" />
+        <action
+            android:id="@+id/action_forumFragment_to_homeFragment"
+            app:destination="@id/home_menu" />
+        <action
+            android:id="@+id/action_forum_menu_to_appointmentFragment"
+            app:destination="@id/appointment_menu" />
+    </fragment>
+    <fragment
+        android:id="@+id/appointment_menu"
+        android:name="com.dermatoai.ui.AppointmentFragment"
+        android:label="fragment_appointment"
+        tools:layout="@layout/fragment_appointment" >
+        <action
+            android:id="@+id/action_appointmentFragment_to_forum_menu"
+            app:destination="@id/forum_menu" />
+        <action
+            android:id="@+id/action_appointmentFragment_to_capture_menu"
+            app:destination="@id/capture_menu" />
+        <action
+            android:id="@+id/action_appointmentFragment_to_home_menu"
+            app:destination="@id/home_menu" />
+    </fragment>
+</navigation>

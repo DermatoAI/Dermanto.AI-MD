@@ -4,31 +4,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     tools:context=".ui.CaptureFragment">
 
-    <androidx.camera.view.PreviewView
-        android:id="@+id/preview_image"
+    <FrameLayout
+        android:id="@+id/preview_container_frame"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/preview_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent" />
+
+        <ImageView
+            android:id="@+id/preview_image_capture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:visibility="gone" />
+    </FrameLayout>
+
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/capture_button"
-        android:layout_width="81dp"
-        android:layout_height="81dp"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_marginBottom="21dp"
+        android:background="@color/white"
         android:scaleType="centerInside"
         android:src="@drawable/check_broken_icon"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/preview_image"
+        app:layout_constraintBottom_toBottomOf="@id/preview_container_frame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:shapeAppearanceOverlay="@style/ImageView.Circle" />
 
     <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/gallery_button"
         android:layout_width="46dp"
         android:layout_height="46dp"
         android:layout_marginBottom="7dp"
@@ -42,17 +62,17 @@
         app:shapeAppearanceOverlay="@style/ImageView.Circle" />
 
     <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/reset_button"
         android:layout_width="46dp"
         android:layout_height="46dp"
         android:layout_marginBottom="7dp"
-        android:scaleType="centerInside"
         android:background="@color/white"
+        android:scaleType="centerInside"
         android:src="@drawable/arrow_rotate_right_02_icon"
         app:layout_constraintBottom_toBottomOf="@+id/capture_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/capture_button"
         app:layout_constraintTop_toTopOf="@+id/capture_button"
         app:shapeAppearanceOverlay="@style/ImageView.Circle" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
