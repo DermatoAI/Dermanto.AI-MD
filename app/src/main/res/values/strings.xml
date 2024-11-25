@@ -16,6 +16,7 @@
     <string name="toolbar_title">Dermato Connect</string>
     <string name="button_detail_text">DETAIL</string>
     <string name="button_meet_text">MEET</string>
+    <string name="classify_text_dumy">Cancer</string>
 
 
     <string-array name="dates">
