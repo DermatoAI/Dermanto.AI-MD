@@ -18,12 +18,12 @@ class HistoryListAdapter :
         RecyclerView.ViewHolder(binding.root) {
         private val defaultDateFormat = DateFormat.getInstance()
         fun bind(item: HistoryData?) {
-            item?.let { i ->
+            item?.let {
                 with(binding) {
-                    historyDateText.text = defaultDateFormat.format(i.date)
-                    historyIssueText.text = i.issue
+                    historyDateText.text = defaultDateFormat.format(it.date)
+                    historyIssueText.text = it.issue
                     historyAccurateText.text =
-                        binding.root.context.getString(R.string.confidence_score_template, i.score)
+                        binding.root.context.getString(R.string.confidence_score_template, it.score)
                 }
             }
         }

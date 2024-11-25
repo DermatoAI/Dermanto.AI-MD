@@ -1,5 +1,6 @@
 package com.dermatoai.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +8,11 @@ import android.view.ViewGroup
 import androidx.credentials.GetCredentialRequest
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import com.dermatoai.R
 import com.dermatoai.databinding.FragmentSignInBinding
 import com.dermatoai.oauth.GoogleAuthenticationService
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import java.util.UUID
@@ -47,11 +46,10 @@ class SignInFragment : Fragment() {
                 str + "%02x".format(byte)
             }
 
-            val signInWithGoogleOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
-                .setFilterByAuthorizedAccounts(false) // true - check if the user has any accounts that have previously been used to sign in to the app
-                .setServerClientId(binding.root.context.getString(R.string.default_web_client_id))
-                .setNonce(hashedNonce)
-                .build()
+            val signInWithGoogleOption: GetSignInWithGoogleOption =
+                GetSignInWithGoogleOption.Builder(binding.root.context.getString(R.string.default_web_client_id))
+                    .setNonce(hashedNonce)
+                    .build()
 
             val request = GetCredentialRequest.Builder()
                 .addCredentialOption(signInWithGoogleOption)
@@ -62,10 +60,12 @@ class SignInFragment : Fragment() {
                     binding.root.context,
                     request,
                     {
-                        this.launch(Dispatchers.Main) {
-                            binding.signUpButton.findNavController()
-                                .navigate(R.id.action_signInFragment_to_birthFragment)
-                        }
+                        binding.root.context.startActivity(
+                            Intent(
+                                binding.root.context,
+                                BaseActivity::class.java
+                            )
+                        )
                     }
                 )
             }

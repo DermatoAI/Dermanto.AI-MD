@@ -2,7 +2,9 @@ package com.dermatoai.helper
 
 import android.icu.text.DateFormat
 import android.view.LayoutInflater
+import android.view.View.GONE
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dermatoai.databinding.AppointmentCardBinding
@@ -16,8 +18,16 @@ class FinishedAppointmentListAdapter :
         private val dateFormat: DateFormat = DateFormat.getInstance()
         fun bind(item: AppointmentData?) {
             item?.let {
-                binding.appointmentDateText.text = dateFormat.format(it.date)
-                binding.doctorNameText.text = it.doctor
+                with(binding) {
+                    appointmentMeetButton.visibility = GONE
+                    appointmentDateText.text = dateFormat.format(it.date)
+                    doctorNameText.text = it.doctor
+
+                    val constraintSet = ConstraintSet()
+                    constraintSet.clone(constraintLayout)
+                    constraintSet.setHorizontalBias(appointmentDetailButton.id, 1f)
+                    constraintSet.applyTo(constraintLayout)
+                }
             }
         }
     }

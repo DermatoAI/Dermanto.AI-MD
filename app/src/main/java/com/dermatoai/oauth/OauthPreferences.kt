@@ -12,7 +12,7 @@ class OauthPreferences @Inject constructor(private val dataStore: DataStore<Pref
     private val token = stringPreferencesKey("oauth_state")
 
     fun getToken(): Flow<String?> {
-       return dataStore.data.map {
+        return dataStore.data.map {
             it[this.token]
         }
     }
@@ -22,5 +22,13 @@ class OauthPreferences @Inject constructor(private val dataStore: DataStore<Pref
             it[this.token] = token
         }
     }
+
+
+    suspend fun removeToken() {
+        dataStore.edit {
+            it[this.token] = ""
+        }
+    }
+
 
 }

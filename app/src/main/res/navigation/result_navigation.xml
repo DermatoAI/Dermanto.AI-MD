@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/result_navigation"
+    app:startDestination="@id/analyzeResultFragment">
+
+    <fragment
+        android:id="@+id/analyzeResultFragment"
+        android:name="com.dermatoai.ui.AnalyzeResultFragment"
+        android:label="fragment_analyze_result"
+        tools:layout="@layout/fragment_analyze_result" >
+        <action
+            android:id="@+id/action_analyzeResultFragment_to_analyzeChatAIFragment"
+            app:destination="@id/analyzeChatAIFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/analyzeChatAIFragment"
+        android:name="com.dermatoai.ui.AnalyzeChatAIFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_analyze_chat" >
+        <action
+            android:id="@+id/action_analyzeChatAIFragment_to_analyzeResultFragment"
+            app:destination="@id/analyzeResultFragment" />
+    </fragment>
+</navigation>

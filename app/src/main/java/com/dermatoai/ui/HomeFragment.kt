@@ -1,20 +1,28 @@
 package com.dermatoai.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentHomeBinding
 import com.dermatoai.helper.HistoryListAdapter
 import com.dermatoai.model.HistoryData
+import com.dermatoai.oauth.OauthPreferences
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.util.Date
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
+
+    @Inject
+    lateinit var oauthPreferences: OauthPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +39,21 @@ class HomeFragment : Fragment() {
         binding.historyRecycleView.adapter = historyListAdapter
         binding.historyRecycleView.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.settingButton.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                oauthPreferences.removeToken()
+                oauthPreferences.getToken().collect {
+                    if (it.isNullOrEmpty()) {
+                        binding.root.context.startActivity(
+                            Intent(
+                                binding.root.context,
+                                LoginActivity::class.java
+                            )
+                        )
+                    }
+                }
+            }
+        }
         val historyList = listOf(
             HistoryData(
                 id = "1",
