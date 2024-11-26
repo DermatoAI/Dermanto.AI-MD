@@ -69,7 +69,6 @@
         android:layout_marginBottom="21dp"
         android:background="@color/white"
         android:scaleType="centerInside"
-        android:src="@drawable/check_broken_icon"
         app:layout_constraintBottom_toBottomOf="@id/preview_container_frame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
