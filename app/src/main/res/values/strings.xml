@@ -27,6 +27,7 @@
     <string name="preview_desc_text">frame for image priview directly from camera</string>
     <string name="lens_button_desc_text">lens button to change lens used to camera</string>
     <string name="flash_button_desc_text">flash button for setup lens when image captured</string>
+    <string name="history_title_text">Your Diagnosis Records</string>
 
 
     <string-array name="dates">

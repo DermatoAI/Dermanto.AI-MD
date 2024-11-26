@@ -1,6 +1,7 @@
 package com.dermatoai.ui
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -46,6 +47,7 @@ class CaptureFragment : Fragment() {
     private lateinit var binding: FragmentCaptureBinding
     private var permissionGranted = false
     private lateinit var previewView: PreviewView
+    private var imageUriExits: Boolean = false
     private lateinit var imageUri: Uri
     private lateinit var imageCapture: ImageCapture
 
@@ -94,6 +96,7 @@ class CaptureFragment : Fragment() {
     ): View {
         binding = FragmentCaptureBinding.inflate(inflater, container, false)
         previewView = binding.previewImage
+        binding.resetButton.visibility = GONE
         return binding.root
     }
 
@@ -103,13 +106,17 @@ class CaptureFragment : Fragment() {
         viewModel.imageCaptureUri.observe(viewLifecycleOwner) { uri ->
             uri?.let {
                 stopCamera()
+                imageUriExits = true
+                imageUri = uri
                 with(binding) {
                     previewImageCapture.apply {
                         setImageURI(uri)
                         visibility = VISIBLE
                     }
+                    binding.resetButton.visibility = VISIBLE
                     binding.previewImage.visibility = GONE
                 }
+                binding.captureButton.setImageResource(R.drawable.check_broken_icon)
             } ?: cameraSetup()
         }
 
@@ -146,8 +153,14 @@ class CaptureFragment : Fragment() {
         }
 
         binding.captureButton.setOnClickListener {
-            captureImage { uri ->
-                viewModel.setImageUri(uri)
+            if (imageUriExits) {
+                val intent = Intent(requireActivity(), ResultActivity::class.java)
+                intent.putExtra("image_url", imageUri.toString())
+                startActivity(intent)
+            } else {
+                captureImage { uri ->
+                    viewModel.setImageUri(uri)
+                }
             }
         }
 
@@ -158,11 +171,14 @@ class CaptureFragment : Fragment() {
 
         binding.resetButton.setOnClickListener {
             viewModel.setImageUri(null)
+            imageUriExits = false
             with(binding) {
                 previewImageCapture.visibility = GONE
                 previewImage.visibility = VISIBLE
+                captureButton.setImageResource(0)
             }
             cameraSetup()
+            binding.resetButton.visibility = GONE
         }
 
         binding.flashButton.setOnClickListener {
@@ -188,7 +204,7 @@ class CaptureFragment : Fragment() {
 
     private fun stopCamera() {
         if (::cameraProvider.isInitialized) {
-            cameraProvider.unbindAll() // Stop all use cases
+            cameraProvider.unbindAll() 
             orientationEventListener.disable()
         }
     }
@@ -212,7 +228,7 @@ class CaptureFragment : Fragment() {
                 .build()
 
             val cameraSelector = CameraSelector.Builder()
-                .requireLensFacing(cameraDirection) // Adjust for front-facing if needed
+                .requireLensFacing(cameraDirection)
                 .build()
 
             try {
@@ -250,7 +266,7 @@ class CaptureFragment : Fragment() {
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    imageUri = outputFileResults.savedUri ?: Uri.fromFile(photoFile)
+                    val imageUri = outputFileResults.savedUri ?: Uri.fromFile(photoFile)
                     captureHandler(imageUri)
                 }
 

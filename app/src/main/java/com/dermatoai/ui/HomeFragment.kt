@@ -4,13 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentHomeBinding
 import com.dermatoai.helper.HistoryListAdapter
 import com.dermatoai.model.HistoryData
+import com.dermatoai.model.HomeViewModel
 import com.dermatoai.oauth.OauthPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -19,7 +23,9 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
+    private var historyList: List<HistoryData>? = emptyList()
     private lateinit var binding: FragmentHomeBinding
+    private val viewModel: HomeViewModel by viewModels()
 
     @Inject
     lateinit var oauthPreferences: OauthPreferences
@@ -54,6 +60,18 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.recordList.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.historyRecycleView.visibility = GONE
+                binding.historyEmptyAnima.visibility = VISIBLE
+            } else {
+                binding.historyRecycleView.visibility = VISIBLE
+                binding.historyEmptyAnima.visibility = GONE
+            }
+            historyListAdapter.submitList(it)
+        }
+
         val historyList = listOf(
             HistoryData(
                 id = "1",
@@ -86,8 +104,6 @@ class HomeFragment : Fragment() {
                 score = 95
             )
         )
-        historyListAdapter.submitList(
-            historyList
-        )
+        viewModel.putRecordList(historyList)
     }
 }
