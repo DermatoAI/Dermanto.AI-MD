@@ -30,8 +30,36 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/preview_desc_text"
             android:visibility="gone" />
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/lens_direction_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/lens_button_desc_text"
+        android:scaleType="centerInside"
+        android:src="@drawable/lens_facing_button_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.02" />
+
+    <ImageView
+        android:id="@+id/flash_button"
+        android:layout_width="40dp"
+        android:contentDescription="@string/flash_button_desc_text"
+        android:src="@drawable/icons8_flash_off"
+        android:layout_height="40dp"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.02" />
 
 
     <com.google.android.material.imageview.ShapeableImageView
