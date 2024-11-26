@@ -37,10 +37,17 @@ android {
 
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
+
+        buildConfigField(
+            "String", "DERMATO_SERVER_URL",
+            "" +
+                    "\"${properties["dermato.server.url"]?.toString()}\""
+        )
     }
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     buildTypes {
