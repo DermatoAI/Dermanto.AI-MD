@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.OrientationEventListener
+import android.view.Surface
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -24,6 +26,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.dermatoai.R
 import com.dermatoai.databinding.FragmentCaptureBinding
 import com.dermatoai.model.CaptureViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +34,11 @@ import java.io.File
 
 @AndroidEntryPoint
 class CaptureFragment : Fragment() {
-    val viewModel: CaptureViewModel by viewModels()
+    @Volatile
+    private var flashState = ImageCapture.FLASH_MODE_OFF
+    private var cameraDirection: Int = CameraSelector.LENS_FACING_BACK
+
+    private val viewModel: CaptureViewModel by viewModels()
 
     private lateinit var cameraProvider: ProcessCameraProvider
     private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
@@ -39,10 +46,26 @@ class CaptureFragment : Fragment() {
     private lateinit var binding: FragmentCaptureBinding
     private var permissionGranted = false
     private lateinit var previewView: PreviewView
-
     private lateinit var imageUri: Uri
     private lateinit var imageCapture: ImageCapture
 
+    private val orientationEventListener by lazy {
+        object : OrientationEventListener(binding.root.context) {
+            override fun onOrientationChanged(orientation: Int) {
+                if (orientation == ORIENTATION_UNKNOWN) {
+                    return
+                }
+                val rotation = when (orientation) {
+                    in 45 until 135 -> Surface.ROTATION_270
+                    in 135 until 225 -> Surface.ROTATION_180
+                    in 225 until 315 -> Surface.ROTATION_90
+                    else -> Surface.ROTATION_0
+                }
+                imageCapture.targetRotation = rotation
+            }
+
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +113,38 @@ class CaptureFragment : Fragment() {
             } ?: cameraSetup()
         }
 
+        viewModel.flashState.observe(viewLifecycleOwner) { state ->
+            with(binding) {
+                when (state) {
+                    ImageCapture.FLASH_MODE_OFF -> {
+                        flashButton.setImageResource(R.drawable.icons8_flash_on)
+                        flashState = ImageCapture.FLASH_MODE_ON
+                    }
+
+                    ImageCapture.FLASH_MODE_ON -> {
+                        flashButton.setImageResource(R.drawable.icons8_flash_auto)
+                        flashState = ImageCapture.FLASH_MODE_AUTO
+                    }
+
+                    ImageCapture.FLASH_MODE_AUTO -> {
+                        flashButton.setImageResource(R.drawable.icons8_flash_off)
+                        flashState = ImageCapture.FLASH_MODE_OFF
+                    }
+                }
+            }
+            cameraSetup()
+        }
+
+        viewModel.lensState.observe(viewLifecycleOwner) { state ->
+            cameraDirection = if (state == CameraSelector.LENS_FACING_BACK) {
+                CameraSelector.LENS_FACING_FRONT
+            } else {
+                CameraSelector.LENS_FACING_BACK
+            }
+            stopCamera()
+            cameraSetup()
+        }
+
         binding.captureButton.setOnClickListener {
             captureImage { uri ->
                 viewModel.setImageUri(uri)
@@ -110,6 +165,15 @@ class CaptureFragment : Fragment() {
             cameraSetup()
         }
 
+        binding.flashButton.setOnClickListener {
+            viewModel.changeFlashState(flashState)
+            stopCamera()
+        }
+
+        binding.lensDirectionButton.setOnClickListener {
+            viewModel.setLensState(cameraDirection)
+        }
+
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
@@ -125,7 +189,13 @@ class CaptureFragment : Fragment() {
     private fun stopCamera() {
         if (::cameraProvider.isInitialized) {
             cameraProvider.unbindAll() // Stop all use cases
+            orientationEventListener.disable()
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        stopCamera()
     }
 
     private fun cameraSetup() {
@@ -138,10 +208,11 @@ class CaptureFragment : Fragment() {
             preview.surfaceProvider = previewView.surfaceProvider
 
             imageCapture = ImageCapture.Builder()
+                .setFlashMode(flashState)
                 .build()
 
             val cameraSelector = CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK) // Adjust for front-facing if needed
+                .requireLensFacing(cameraDirection) // Adjust for front-facing if needed
                 .build()
 
             try {
@@ -166,6 +237,7 @@ class CaptureFragment : Fragment() {
             return
         }
 
+        orientationEventListener.enable()
         val photoFile = File(
             requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
             "DermatoAI-${System.currentTimeMillis()}.jpg"

@@ -17,6 +17,16 @@
     <string name="button_detail_text">DETAIL</string>
     <string name="button_meet_text">MEET</string>
     <string name="classify_text_dumy">Cancer</string>
+    <string name="birth_title">What’s your birth date?</string>
+    <string name="birth_title_subtitle_text">This won’t be public</string>
+    <string name="month_input_text_placeholder">Month</string>
+    <string name="date_input_text_placeholder">Date</string>
+    <string name="year_input_text_placeholder">Year</string>
+    <string name="term_message_text">By signing up, you agree to the Terms of Service and Privacy Policy, Including Cookie Use. Dermato.Ai may use your contact information, including your email address and phone number for purposes outlined in our Privacy Policy, like keeping your account secure and personalizing our services. Learn more. Others will be able to find you by email or phone number.</string>
+    <string name="continue_button_text">CONTINUE</string>
+    <string name="preview_desc_text">frame for image priview directly from camera</string>
+    <string name="lens_button_desc_text">lens button to change lens used to camera</string>
+    <string name="flash_button_desc_text">flash button for setup lens when image captured</string>
 
 
     <string-array name="dates">
