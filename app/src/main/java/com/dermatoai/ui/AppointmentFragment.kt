@@ -3,18 +3,25 @@ package com.dermatoai.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentAppointmentBinding
 import com.dermatoai.helper.FinishedAppointmentListAdapter
 import com.dermatoai.model.AppointmentData
+import com.dermatoai.model.AppointmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+@AndroidEntryPoint
 class AppointmentFragment : Fragment() {
     private lateinit var binding: FragmentAppointmentBinding
+    private val viewModel: AppointmentViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +38,20 @@ class AppointmentFragment : Fragment() {
         binding.finishedContainerList.apply {
             adapter = finishedListAdapter
             layoutManager = LinearLayoutManager(context)
+        }
+
+        viewModel.historyAppointment.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.apply {
+                    finishedContainerList.visibility = GONE
+                    historyEmptyAnima.visibility = VISIBLE
+                }
+            } else {
+                binding.apply {
+                    finishedContainerList.visibility = VISIBLE
+                    historyEmptyAnima.visibility = GONE
+                }
+            }
         }
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         val finishedList = listOf(
@@ -59,7 +80,7 @@ class AppointmentFragment : Fragment() {
                 doctor = "Dr. David Wilson"
             )
         )
-        finishedListAdapter.submitList(finishedList)
+//        finishedListAdapter.submitList(finishedList)
     }
 
 }

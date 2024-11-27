@@ -204,7 +204,7 @@ class CaptureFragment : Fragment() {
 
     private fun stopCamera() {
         if (::cameraProvider.isInitialized) {
-            cameraProvider.unbindAll() 
+            cameraProvider.unbindAll()
             orientationEventListener.disable()
         }
     }

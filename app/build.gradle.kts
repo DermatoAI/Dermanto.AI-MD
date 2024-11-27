@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.androidx.concurrent.futures.ktx)
+    implementation(libs.androidx.viewpager2)
     /*
     added library
     - room
