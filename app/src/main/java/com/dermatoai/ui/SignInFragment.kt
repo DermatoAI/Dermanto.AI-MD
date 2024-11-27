@@ -60,12 +60,13 @@ class SignInFragment : Fragment() {
                     binding.root.context,
                     request,
                     {
-                        binding.root.context.startActivity(
+                        requireActivity().startActivity(
                             Intent(
                                 binding.root.context,
                                 BaseActivity::class.java
                             )
                         )
+                        requireActivity().finish()
                     }
                 )
             }

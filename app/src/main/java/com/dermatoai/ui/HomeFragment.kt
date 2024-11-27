@@ -49,12 +49,13 @@ class HomeFragment : Fragment() {
                 oauthPreferences.removeToken()
                 oauthPreferences.getToken().collect {
                     if (it.isNullOrEmpty()) {
-                        binding.root.context.startActivity(
+                        requireActivity().startActivity(
                             Intent(
                                 binding.root.context,
                                 LoginActivity::class.java
                             )
                         )
+                        requireActivity().finish()
                     }
                 }
             }
