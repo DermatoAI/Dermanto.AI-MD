@@ -28,6 +28,15 @@
     <string name="lens_button_desc_text">lens button to change lens used to camera</string>
     <string name="flash_button_desc_text">flash button for setup lens when image captured</string>
     <string name="history_title_text">Your Diagnosis Records</string>
+    <string name="headline_sign_in_text">Have any issue with your skin?</string>
+    <string name="text2_subtitle_text">Join today</string>
+    <string name="sign_in_with_google_text">SIGN IN WITH GOOGLE</string>
+    <string name="term_sign_in_text">By signing up you agree to the Terms of Service and Privacy Policy including Cookie Use.</string>
+    <string name="register_ask_title_text">does’t have account ?</string>
+    <string name="sign_up_button_text">SIGN UP</string>
+    <string name="nickname_headline_title">What should we call you?</string>
+    <string name="nickname_subtitle_text">Your @username is Unique. You can’t change it.</string>
+    <string name="usename_placeholder_text">Username</string>
 
 
     <string-array name="dates">
