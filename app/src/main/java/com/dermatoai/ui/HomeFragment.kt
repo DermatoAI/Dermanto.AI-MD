@@ -18,7 +18,6 @@ import com.dermatoai.model.HomeViewModel
 import com.dermatoai.oauth.OauthPreferences
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.util.Date
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -72,38 +71,38 @@ class HomeFragment : Fragment() {
             historyListAdapter.submitList(it)
         }
 
-        val historyList = listOf(
-            HistoryData(
-                id = "1",
-                date = Date(2023, 10, 20),
-                issue = "Melanoma",
-                score = 85
-            ),
-            HistoryData(
-                id = "2",
-                date = Date(2023, 11, 10),
-                issue = "Eczema",
-                score = 70
-            ),
-            HistoryData(
-                id = "3",
-                date = Date(2023, 12, 5),
-                issue = "Psoriasis",
-                score = 95
-            ),
-            HistoryData(
-                id = "4",
-                date = Date(2023, 12, 5),
-                issue = "Psoriasis",
-                score = 95
-            ),
-            HistoryData(
-                id = "5",
-                date = Date(2023, 12, 5),
-                issue = "Psoriasis",
-                score = 95
-            )
-        )
-        viewModel.putRecordList(historyList)
+//        val historyList = listOf(
+//            HistoryData(
+//                id = "1",
+//                date = Date(2023, 10, 20),
+//                issue = "Melanoma",
+//                score = 85
+//            ),
+//            HistoryData(
+//                id = "2",
+//                date = Date(2023, 11, 10),
+//                issue = "Eczema",
+//                score = 70
+//            ),
+//            HistoryData(
+//                id = "3",
+//                date = Date(2023, 12, 5),
+//                issue = "Psoriasis",
+//                score = 95
+//            ),
+//            HistoryData(
+//                id = "4",
+//                date = Date(2023, 12, 5),
+//                issue = "Psoriasis",
+//                score = 95
+//            ),
+//            HistoryData(
+//                id = "5",
+//                date = Date(2023, 12, 5),
+//                issue = "Psoriasis",
+//                score = 95
+//            )
+//        )
+//        viewModel.putRecordList(historyList)
     }
 }
