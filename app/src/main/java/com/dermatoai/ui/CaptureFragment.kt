@@ -214,6 +214,13 @@ class CaptureFragment : Fragment() {
         stopCamera()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!::cameraProvider.isInitialized and !imageUriExits) {
+            cameraSetup()
+        }
+    }
+
     private fun cameraSetup() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
