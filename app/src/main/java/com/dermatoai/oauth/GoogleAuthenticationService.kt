@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.GoogleAuthProvider
@@ -43,15 +45,20 @@ class GoogleAuthenticationService @Inject constructor(
                 )
                 handleSignIn(result)
                 success()
-            } catch (e: GetCredentialException) {
+            } catch (e: GetCredentialCancellationException) {
                 handleFailure(e)
+                error(e)
+            } catch (e: NoCredentialException) {
+                handleFailure(e)
+                error(e)
+            } catch (e: GetCredentialException) {
                 error(e)
             }
         }
     }
 
     private fun handleFailure(error: GetCredentialException) {
-        println(error.toString())
+        Log.e(TAG,"Authentication ERROR: ${error.errorMessage}")
     }
 
     private suspend fun handleSignIn(result: GetCredentialResponse) {
