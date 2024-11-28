@@ -72,7 +72,7 @@
                 android:layout_width="64dp"
                 android:layout_height="61dp"
                 android:layout_marginEnd="32dp"
-                android:text="60"
+                android:text="@string/dummy_60"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="48sp"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Cloudy"
+                android:text="@string/dummy_sun_type"
                 android:textAppearance="@style/TextAppearance.SemiBold"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@id/cloud_icon_indicator"
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Sun with a cool"
+                android:text="@string/dummy_sun_type_desc"
                 android:textColor="@color/white_70"
                 android:textSize="11sp"
                 app:layout_constraintStart_toEndOf="@id/cloud_icon_indicator"
@@ -134,8 +134,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="23dp"
-                        android:paddingEnd="2dp"
-                        android:text="60"
+                        android:text="@string/dummy_60"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -162,7 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="25dp"
-                    android:text="Humidity"
+                    android:text="@string/humidity_text"
                     android:textColor="@color/white_70"
                     android:textSize="12sp" />
             </FrameLayout>
@@ -188,8 +187,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="27dp"
-                        android:paddingEnd="2dp"
-                        android:text="60"
+                        android:text="@string/dummy_60"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -215,7 +213,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="25dp"
-                    android:text="Sun"
+                    android:text="@string/uv_scale_text"
                     android:textColor="@color/white_70"
                     android:textSize="12sp" />
             </FrameLayout>
@@ -241,7 +239,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="25dp"
-                        android:text="60"
+                        android:text="@string/dummy_60"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -257,8 +255,9 @@
                         android:layout_marginStart="40dp"
                         android:layout_marginBottom="3dp"
                         android:backgroundTint="@color/white"
-                        android:text="Km/h"
-                        android:textSize="5sp" />
+                        android:text="@string/force_unit"
+                        android:textSize="5sp"
+                        tools:ignore="SmallSp" />
 
                 </FrameLayout>
 
@@ -267,7 +266,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="25dp"
-                    android:text="Force"
+                    android:text="@string/force_text"
                     android:textColor="@color/white_70"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="@id/temperature_number_mini" />
@@ -294,8 +293,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="23dp"
-                        android:paddingEnd="2dp"
-                        android:text="60"
+                        android:text="@string/dummy_60"
                         android:textSize="12sp" />
 
                     <ImageView
@@ -320,7 +318,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="25dp"
-                    android:text="Sensible"
+                    android:text="@string/sensible_text"
                     android:textColor="@color/white_70"
                     android:textSize="12sp" />
             </FrameLayout>

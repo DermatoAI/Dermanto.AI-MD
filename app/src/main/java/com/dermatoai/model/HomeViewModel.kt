@@ -11,4 +11,11 @@ class HomeViewModel : ViewModel() {
     fun putRecordList(records: List<HistoryData>) {
         _recordList.value = records
     }
+
+    private val _climateInfo = MutableLiveData<ClimateInfoData>()
+    val climateInfo: LiveData<ClimateInfoData> = _climateInfo
+
+    fun putClimateInfo(climateInfo: ClimateInfoData) {
+        _climateInfo.value = climateInfo
+    }
 }
