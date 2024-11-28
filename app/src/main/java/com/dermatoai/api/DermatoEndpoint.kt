@@ -2,6 +2,9 @@ package com.dermatoai.api
 
 import retrofit2.Call
 
+/**
+ * Interface that representative for api schema and have ability to fetch data to the server.
+ */
 interface DermatoEndpoint {
 
     fun regisUser(): Call<Unit>

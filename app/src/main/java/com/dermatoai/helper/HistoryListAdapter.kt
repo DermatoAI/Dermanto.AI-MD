@@ -7,17 +7,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dermatoai.R
 import com.dermatoai.databinding.DiagnosisRecordCardBinding
-import com.dermatoai.model.HistoryData
+import com.dermatoai.model.AnalyzeHistoryData
 
 class HistoryListAdapter :
-    ListAdapter<HistoryData, HistoryListAdapter.ViewHolder>(HistoryData.DIFF_UTIL) {
+    ListAdapter<AnalyzeHistoryData, HistoryListAdapter.ViewHolder>(AnalyzeHistoryData.DIFF_UTIL) {
 
     private lateinit var binding: DiagnosisRecordCardBinding
 
     inner class ViewHolder(private val binding: DiagnosisRecordCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val defaultDateFormat = DateFormat.getInstance()
-        fun bind(item: HistoryData?) {
+        fun bind(item: AnalyzeHistoryData?) {
             item?.let {
                 with(binding) {
                     historyDateText.text = defaultDateFormat.format(it.date)

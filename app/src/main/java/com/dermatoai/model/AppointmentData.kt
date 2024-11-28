@@ -1,8 +1,18 @@
 package com.dermatoai.model
 
 import androidx.recyclerview.widget.DiffUtil
+import com.dermatoai.model.AppointmentData.Companion.DIFF_UTIL
 import java.util.Date
 
+/**
+ * used for appointment history in CaptureFragment.
+ * @param date
+ * @param doctor
+ *
+ * @property date
+ * @property doctor
+ * @property DIFF_UTIL used for ListAdapter
+ */
 data class AppointmentData(
     val date: Date,
     val doctor: String,

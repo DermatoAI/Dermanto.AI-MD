@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentHomeBinding
 import com.dermatoai.helper.HistoryListAdapter
-import com.dermatoai.model.HistoryData
+import com.dermatoai.model.AnalyzeHistoryData
 import com.dermatoai.model.HomeViewModel
 import com.dermatoai.oauth.OauthPreferences
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private var historyList: List<HistoryData>? = emptyList()
+    private var historyList: List<AnalyzeHistoryData>? = emptyList()
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by viewModels()
 
@@ -73,31 +73,31 @@ class HomeFragment : Fragment() {
         }
 
 //        val historyList = listOf(
-//            HistoryData(
+//            AnalyzeHistoryData(
 //                id = "1",
 //                date = Date(2023, 10, 20),
 //                issue = "Melanoma",
 //                score = 85
 //            ),
-//            HistoryData(
+//            AnalyzeHistoryData(
 //                id = "2",
 //                date = Date(2023, 11, 10),
 //                issue = "Eczema",
 //                score = 70
 //            ),
-//            HistoryData(
+//            AnalyzeHistoryData(
 //                id = "3",
 //                date = Date(2023, 12, 5),
 //                issue = "Psoriasis",
 //                score = 95
 //            ),
-//            HistoryData(
+//            AnalyzeHistoryData(
 //                id = "4",
 //                date = Date(2023, 12, 5),
 //                issue = "Psoriasis",
 //                score = 95
 //            ),
-//            HistoryData(
+//            AnalyzeHistoryData(
 //                id = "5",
 //                date = Date(2023, 12, 5),
 //                issue = "Psoriasis",
