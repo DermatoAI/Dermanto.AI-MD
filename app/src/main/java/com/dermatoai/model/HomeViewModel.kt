@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class HomeViewModel : ViewModel() {
-    private val _recordList = MutableLiveData<List<HistoryData>>()
-    val recordList: LiveData<List<HistoryData>> = _recordList
+    private val _recordList = MutableLiveData<List<AnalyzeHistoryData>>()
+    val recordList: LiveData<List<AnalyzeHistoryData>> = _recordList
 
-    fun putRecordList(records: List<HistoryData>) {
+    fun putRecordList(records: List<AnalyzeHistoryData>) {
         _recordList.value = records
     }
 

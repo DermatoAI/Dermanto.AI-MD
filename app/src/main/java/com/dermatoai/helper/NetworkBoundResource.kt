@@ -70,7 +70,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
 
         } catch (throwable: Throwable) {
 
-            //Dispatch any error emitted to the UI, plus data emmited from the Database
+            //Dispatch any error emitted to the UI, plus data emitted from the Database
             query().map { Resource.Error(throwable, it) }
 
         }
