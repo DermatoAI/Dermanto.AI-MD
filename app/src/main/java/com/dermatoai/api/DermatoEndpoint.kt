@@ -11,10 +11,10 @@ interface DermatoEndpoint {
 
     fun authorizeUser(): Call<Unit>
 
-    fun getClimateInfo(): Call<Unit>
+    fun getClimateInfo(): Call<ClimateInfoBRS>
 
-    fun analyzeImage(): Call<Unit>
+    fun analyzeImage(): Call<AnalyzeImageBRS>
 
-    fun askChatBot(): Call<Unit>
+    fun askChatBot(): Call<ChatBRQS>
 
 }
