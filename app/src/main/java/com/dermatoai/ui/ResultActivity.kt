@@ -16,7 +16,7 @@ class ResultActivity : AppCompatActivity() {
         val binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val toolbar = binding.toolbar
-        toolbar.root.setTitle(R.string.history_title_text)
+        toolbar.root.setTitle(R.string.result_header_title)
 
         val slideFragment = listOf(
             AnalyzeResultFragment(), AnalyzeChatAIFragment()
