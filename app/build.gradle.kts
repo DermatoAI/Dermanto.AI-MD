@@ -10,6 +10,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.dokka")
     id("com.google.gms.google-services")
+    id("androidx.room")
 }
 
 android {
@@ -61,6 +62,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 }
 
