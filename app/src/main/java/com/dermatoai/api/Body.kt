@@ -21,13 +21,12 @@ data class ClimateInfoBRS(
     val uvScale: Int,
 )
 
-data class AnalyzeImageBRS(
-    val confidenceScore: Int,
-    val issue: String,
-    val time: Long,
+data class AnalyzeImage(
+    val confidence: Int,
+    val diagnosis: String,
+    val timestamp: Date,
     val image: String,
-    val additionalInfo: String,
-    val userId: String
+    val treatmentSuggestions: String,
 )
 
 data class AppointmentBRS(
@@ -37,4 +36,9 @@ data class AppointmentBRS(
 
 data class ChatBRQS(
     val text: String,
+)
+
+data class Response<T>(
+    val userId: String,
+    val result: T
 )

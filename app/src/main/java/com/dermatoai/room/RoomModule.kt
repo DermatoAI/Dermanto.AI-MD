@@ -24,10 +24,6 @@ class RoomModule {
     }
 
     @Provides
-    fun provideUserDao(database: DermatoDatabase): UserDAO =
-        database.userDao()
-
-    @Provides
     fun provideDiagnoseRecordDao(database: DermatoDatabase): DiagnoseRecordDAO =
         database.diagnoseRecordDao()
 

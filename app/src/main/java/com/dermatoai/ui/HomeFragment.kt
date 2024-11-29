@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentHomeBinding
 import com.dermatoai.helper.HistoryListAdapter
-import com.dermatoai.model.AnalyzeHistoryData
+import com.dermatoai.model.AnalyzeViewModel
 import com.dermatoai.model.HomeViewModel
 import com.dermatoai.oauth.OauthPreferences
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,9 +22,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private var historyList: List<AnalyzeHistoryData>? = emptyList()
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels()
+
+    private val homeViewModel: HomeViewModel by viewModels()
+    private val analyzeViewModel: AnalyzeViewModel by viewModels()
 
     @Inject
     lateinit var oauthPreferences: OauthPreferences
@@ -61,7 +62,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewModel.recordList.observe(viewLifecycleOwner) {
+        homeViewModel.recordList.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.historyRecycleView.visibility = GONE
                 binding.historyEmptyAnima.visibility = VISIBLE
@@ -72,38 +73,8 @@ class HomeFragment : Fragment() {
             historyListAdapter.submitList(it)
         }
 
-//        val historyList = listOf(
-//            AnalyzeHistoryData(
-//                id = "1",
-//                date = Date(2023, 10, 20),
-//                issue = "Melanoma",
-//                score = 85
-//            ),
-//            AnalyzeHistoryData(
-//                id = "2",
-//                date = Date(2023, 11, 10),
-//                issue = "Eczema",
-//                score = 70
-//            ),
-//            AnalyzeHistoryData(
-//                id = "3",
-//                date = Date(2023, 12, 5),
-//                issue = "Psoriasis",
-//                score = 95
-//            ),
-//            AnalyzeHistoryData(
-//                id = "4",
-//                date = Date(2023, 12, 5),
-//                issue = "Psoriasis",
-//                score = 95
-//            ),
-//            AnalyzeHistoryData(
-//                id = "5",
-//                date = Date(2023, 12, 5),
-//                issue = "Psoriasis",
-//                score = 95
-//            )
-//        )
-//        viewModel.putRecordList(historyList)
+        analyzeViewModel.history.observe(viewLifecycleOwner) {
+            homeViewModel.putRecordList(it)
+        }
     }
 }
