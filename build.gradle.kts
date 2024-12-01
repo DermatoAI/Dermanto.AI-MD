@@ -9,4 +9,5 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.51.1" apply false
     id("org.jetbrains.dokka") version "1.9.20"
     id("com.google.gms.google-services") version "4.4.2" apply false
+    id("androidx.room") version "2.6.1" apply false
 }

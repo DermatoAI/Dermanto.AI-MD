@@ -11,11 +11,23 @@ import com.dermatoai.databinding.AppointmentCardBinding
 import com.dermatoai.model.AppointmentData
 import com.dermatoai.model.AppointmentData.Companion.DIFF_UTIL
 
+/**
+ * Adapter class that used for generated view component for RecycleView component.
+ */
 class FinishedAppointmentListAdapter :
     ListAdapter<AppointmentData, FinishedAppointmentListAdapter.ViewModel>(DIFF_UTIL) {
-
+    /**
+     * class that will representative to each view will create with specific data.
+     * @param binding
+     * @property dateFormat
+     */
     class ViewModel(val binding: AppointmentCardBinding) : RecyclerView.ViewHolder(binding.root) {
         private val dateFormat: DateFormat = DateFormat.getInstance()
+
+        /**
+         * after created view it will bind with this method that responsibility for adding data to view component.
+         * @param item
+         */
         fun bind(item: AppointmentData?) {
             item?.let {
                 with(binding) {

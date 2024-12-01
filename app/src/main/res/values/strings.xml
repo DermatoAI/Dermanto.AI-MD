@@ -24,7 +24,7 @@
     <string name="year_input_text_placeholder">Year</string>
     <string name="term_message_text">By signing up, you agree to the Terms of Service and Privacy Policy, Including Cookie Use. Dermato.Ai may use your contact information, including your email address and phone number for purposes outlined in our Privacy Policy, like keeping your account secure and personalizing our services. Learn more. Others will be able to find you by email or phone number.</string>
     <string name="continue_button_text">CONTINUE</string>
-    <string name="preview_desc_text">frame for image priview directly from camera</string>
+    <string name="preview_desc_text">frame for image preview directly from camera</string>
     <string name="lens_button_desc_text">lens button to change lens used to camera</string>
     <string name="flash_button_desc_text">flash button for setup lens when image captured</string>
     <string name="history_title_text">Your Diagnosis Records</string>
@@ -36,7 +36,20 @@
     <string name="sign_up_button_text">SIGN UP</string>
     <string name="nickname_headline_title">What should we call you?</string>
     <string name="nickname_subtitle_text">Your @username is Unique. You can’t change it.</string>
-    <string name="usename_placeholder_text">Username</string>
+    <string name="username_placeholder_text">Username</string>
+    <string name="result_header_title">Dermato Diagnosis Results</string>
+    <string name="uv_scale_text">UV Scale</string>
+    <string name="dummy_60">-</string>
+    <string name="force_unit">Km/h</string>
+    <string name="force_text">Force</string>
+    <string name="sensible_text">Sensible</string>
+    <string name="humidity_text">Humidity</string>
+    <string name="dummy_sun_type_desc">Sun with a cool</string>
+    <string name="dummy_sun_type">Cloud</string>
+    <string name="celsius_format">%1$.0f° C</string>
+    <string name="degree_format">%1$.0f°</string>
+    <string name="percent_format">%1$d%%</string>
+    <string name="speed_format">%1$.1f m/s</string>
 
 
     <string-array name="dates">
@@ -87,4 +100,5 @@
         <item>November</item>
         <item>December</item>
     </string-array>
+
 </resources>

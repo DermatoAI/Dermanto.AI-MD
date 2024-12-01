@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.dermatoai.R
 import com.dermatoai.databinding.FragmentCaptureBinding
+import com.dermatoai.model.AnalyzeViewModel
 import com.dermatoai.model.CaptureViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -39,7 +40,8 @@ class CaptureFragment : Fragment() {
     private var flashState = ImageCapture.FLASH_MODE_OFF
     private var cameraDirection: Int = CameraSelector.LENS_FACING_BACK
 
-    private val viewModel: CaptureViewModel by viewModels()
+    private val captureViewModel: CaptureViewModel by viewModels()
+    private val analyzeViewModel: AnalyzeViewModel by viewModels()
 
     private lateinit var cameraProvider: ProcessCameraProvider
     private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
@@ -73,7 +75,7 @@ class CaptureFragment : Fragment() {
         super.onCreate(savedInstanceState)
         pickMediaLauncher =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
-                viewModel.setImageUri(uri)
+                captureViewModel.setImageUri(uri)
             }
 
         cameraPermissionLauncher =
@@ -103,7 +105,7 @@ class CaptureFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.imageCaptureUri.observe(viewLifecycleOwner) { uri ->
+        captureViewModel.imageCaptureUri.observe(viewLifecycleOwner) { uri ->
             uri?.let {
                 stopCamera()
                 imageUriExits = true
@@ -120,7 +122,7 @@ class CaptureFragment : Fragment() {
             } ?: cameraSetup()
         }
 
-        viewModel.flashState.observe(viewLifecycleOwner) { state ->
+        captureViewModel.flashState.observe(viewLifecycleOwner) { state ->
             with(binding) {
                 when (state) {
                     ImageCapture.FLASH_MODE_OFF -> {
@@ -142,7 +144,7 @@ class CaptureFragment : Fragment() {
             cameraSetup()
         }
 
-        viewModel.lensState.observe(viewLifecycleOwner) { state ->
+        captureViewModel.lensState.observe(viewLifecycleOwner) { state ->
             cameraDirection = if (state == CameraSelector.LENS_FACING_BACK) {
                 CameraSelector.LENS_FACING_FRONT
             } else {
@@ -154,12 +156,13 @@ class CaptureFragment : Fragment() {
 
         binding.captureButton.setOnClickListener {
             if (imageUriExits) {
+analyzeViewModel
                 val intent = Intent(requireActivity(), ResultActivity::class.java)
                 intent.putExtra("image_url", imageUri.toString())
                 startActivity(intent)
             } else {
                 captureImage { uri ->
-                    viewModel.setImageUri(uri)
+                    captureViewModel.setImageUri(uri)
                 }
             }
         }
@@ -170,7 +173,7 @@ class CaptureFragment : Fragment() {
         }
 
         binding.resetButton.setOnClickListener {
-            viewModel.setImageUri(null)
+            captureViewModel.setImageUri(null)
             imageUriExits = false
             with(binding) {
                 previewImageCapture.visibility = GONE
@@ -182,12 +185,12 @@ class CaptureFragment : Fragment() {
         }
 
         binding.flashButton.setOnClickListener {
-            viewModel.changeFlashState(flashState)
+            captureViewModel.changeFlashState(flashState)
             stopCamera()
         }
 
         binding.lensDirectionButton.setOnClickListener {
-            viewModel.setLensState(cameraDirection)
+            captureViewModel.setLensState(cameraDirection)
         }
 
         if (ContextCompat.checkSelfPermission(
@@ -212,6 +215,13 @@ class CaptureFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         stopCamera()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!::cameraProvider.isInitialized and !imageUriExits) {
+            cameraSetup()
+        }
     }
 
     private fun cameraSetup() {

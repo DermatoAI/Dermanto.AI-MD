@@ -5,22 +5,19 @@ import android.util.Log
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-@Module
-@InstallIn(ActivityComponent::class)
 class GoogleAuthenticationService @Inject constructor(
     private val repository: GoogleAuthenticationRepository,
 ) {
@@ -32,7 +29,7 @@ class GoogleAuthenticationService @Inject constructor(
         context: Context,
         request: GetCredentialRequest,
         success: () -> Unit,
-        error: () -> Unit = {}
+        error: (Throwable) -> Unit = {}
     ) {
         val credentialManager = CredentialManager.create(context)
         withContext(Dispatchers.IO) {
@@ -43,15 +40,20 @@ class GoogleAuthenticationService @Inject constructor(
                 )
                 handleSignIn(result)
                 success()
-            } catch (e: GetCredentialException) {
+            } catch (e: GetCredentialCancellationException) {
                 handleFailure(e)
+                error(e)
+            } catch (e: NoCredentialException) {
+                handleFailure(e)
+                error(e)
+            } catch (e: GetCredentialException) {
                 error(e)
             }
         }
     }
 
     private fun handleFailure(error: GetCredentialException) {
-        println(error.toString())
+        Log.e(TAG, "Authentication ERROR: ${error.errorMessage}")
     }
 
     private suspend fun handleSignIn(result: GetCredentialResponse) {
@@ -67,10 +69,12 @@ class GoogleAuthenticationService @Inject constructor(
                 val data = Firebase.auth.signInWithCredential(firebaseCredential).await()
 
                 data.user?.let {
-                    val username = it.displayName
-                    val profilePicture = googleIdTokenCredential.profilePictureUri
-                    val email = it.email
                     repository.saveToken(googleIdTokenCredential.idToken)
+                    googleIdTokenCredential.profilePictureUri?.let { pp ->
+                        repository.saveProfilePicture(pp)
+                    }
+                    it.displayName?.let { name -> repository.saveNickname(name) }
+                    it.displayName?.let { name -> repository.saveAccountName(name) }
                 }
             } catch (e: GoogleIdTokenParsingException) {
                 Log.e(TAG, "Received an invalid google id token response", e)
