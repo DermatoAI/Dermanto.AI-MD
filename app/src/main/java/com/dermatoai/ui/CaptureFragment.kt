@@ -1,11 +1,12 @@
 package com.dermatoai.ui
 
 import android.Manifest
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.OrientationEventListener
@@ -31,8 +32,8 @@ import com.dermatoai.R
 import com.dermatoai.databinding.FragmentCaptureBinding
 import com.dermatoai.model.AnalyzeViewModel
 import com.dermatoai.model.CaptureViewModel
+import com.dermatoai.ui.ResultActivity.Companion.IMAGE_URL
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
 
 @AndroidEntryPoint
 class CaptureFragment : Fragment() {
@@ -156,9 +157,8 @@ class CaptureFragment : Fragment() {
 
         binding.captureButton.setOnClickListener {
             if (imageUriExits) {
-analyzeViewModel
                 val intent = Intent(requireActivity(), ResultActivity::class.java)
-                intent.putExtra("image_url", imageUri.toString())
+                intent.putExtra(IMAGE_URL, imageUri.toString())
                 startActivity(intent)
             } else {
                 captureImage { uri ->
@@ -264,19 +264,25 @@ analyzeViewModel
         }
 
         orientationEventListener.enable()
-        val photoFile = File(
-            requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-            "DermatoAI-${System.currentTimeMillis()}.jpg"
-        )
 
-        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+        val contentValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, "DermatoAI-${System.currentTimeMillis()}")
+            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/${getString(R.string.app_name)}")
+        }
+
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(
+            requireContext().contentResolver,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        ).build()
 
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    val imageUri = outputFileResults.savedUri ?: Uri.fromFile(photoFile)
+                    val imageUri = outputFileResults.savedUri
                     captureHandler(imageUri)
                 }
 
