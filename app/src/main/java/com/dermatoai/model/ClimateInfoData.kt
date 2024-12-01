@@ -2,22 +2,26 @@ package com.dermatoai.model
 
 /**
  * used for climate information data structure in HomeFragment.
- * @param sunType
+ * @param cloudCategory
+ * @param cloudDescription
  * @param temperature
  * @param humidity
  * @param force
- * @param uvScale
+ * @param uvi
  *
- * @property sunType
+ * @property cloudCategory
+ * @property cloudDescription
  * @property temperature
  * @property humidity
  * @property force
- * @property uvScale
+ * @property uvi
  */
 data class ClimateInfoData(
-    val sunType: String,
-    val temperature: Int,
+    val cloudCategory: String,
+    val cloudDescription: String,
+    val cloudIcon: Int,
+    val temperature: Double,
     val humidity: Int,
-    val force: Int,
-    val uvScale: Int,
+    val force: Double,
+    val uvi: Double,
 )

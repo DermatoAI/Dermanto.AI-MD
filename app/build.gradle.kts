@@ -41,8 +41,11 @@ android {
 
         buildConfigField(
             "String", "DERMATO_SERVER_URL",
-            "" +
-                    "\"${properties["dermato.server.url"]?.toString()}\""
+            "\"${properties["dermato.server.url"]?.toString()}\""
+        )
+        buildConfigField(
+            "String", "OPENMETEO_SERVER_URL",
+            "\"${properties["openmeteo.server.url"]?.toString()}\""
         )
     }
 
@@ -77,6 +80,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -95,10 +99,12 @@ dependencies {
      */
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation(libs.androidx.room.ktx)
 
     implementation(libs.converter.gson)
     implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
+    implementation(libs.okhttp)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

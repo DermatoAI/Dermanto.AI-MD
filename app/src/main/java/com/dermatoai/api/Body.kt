@@ -1,16 +1,11 @@
 package com.dermatoai.api
 
+import com.google.gson.annotations.SerializedName
 import java.util.Date
 
-
-data class LoginBRQ(
-    val userId: String
-)
-
-data class RegisterBRQ(
+data class Response<T>(
     val userId: String,
-    val birthDate: Date,
-    val nickname: String,
+    val result: T
 )
 
 data class ClimateInfoBRS(
@@ -29,16 +24,35 @@ data class AnalyzeImage(
     val treatmentSuggestions: String,
 )
 
-data class AppointmentBRS(
-    val date: Date,
-    val doctor: String,
-)
-
 data class ChatBRQS(
     val text: String,
 )
 
-data class Response<T>(
-    val userId: String,
-    val result: T
+data class Weather(
+    @SerializedName("current")
+    val current: CurrentWeather,
+    @SerializedName("daily")
+    val daily: DailyWeather,
+)
+
+data class CurrentWeather(
+    @SerializedName("is_day")
+    val isDay: Int,
+    @SerializedName("weather_code")
+    val weatherCode: Int,
+    @SerializedName("cloud_cover")
+    val cloudCover: Int,
+    @SerializedName("wind_speed_10m")
+    val windSpeed: Double,
+    @SerializedName("temperature_2m")
+    val temperature: Double,
+    @SerializedName("relative_humidity_2m")
+    val humidity: Int
+)
+
+data class DailyWeather(
+    @SerializedName("uv_index_max")
+    val uviMax: List<Double>,
+    @SerializedName("uv_index_clear_sky_max")
+    val uviSkyMax: List<Double>
 )
