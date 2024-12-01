@@ -19,6 +19,32 @@
         app:strokeColor="?attr/colorPrimary"
         app:strokeWidth="2dp" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/nickname_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="@string/app_name"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/profile_image"
+        app:layout_constraintStart_toEndOf="@id/profile_image"
+        app:layout_constraintTop_toTopOf="@id/profile_image"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/account_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:alpha="0.6"
+        android:text="@string/app_name"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/profile_image"
+        app:layout_constraintStart_toEndOf="@id/profile_image"
+        app:layout_constraintTop_toBottomOf="@id/nickname_text" />
+
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/setting_button"
         android:layout_width="24dp"
@@ -73,13 +99,13 @@
                 android:id="@+id/temperature_number_text"
                 android:layout_width="wrap_content"
                 android:layout_height="61dp"
-                app:layout_constraintHorizontal_bias="0.9"
                 android:text="@string/dummy_60"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="48sp"
                 app:layout_constraintBottom_toTopOf="@id/card_line"
                 app:layout_constraintEnd_toEndOf="@id/card_container"
+                app:layout_constraintHorizontal_bias="0.9"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/card_container" />
 
@@ -92,10 +118,10 @@
                 android:text="@string/dummy_sun_type"
                 android:textAppearance="@style/TextAppearance.SemiBold"
                 android:textSize="14sp"
-                app:layout_constraintVertical_bias="0.3"
                 app:layout_constraintBottom_toBottomOf="@+id/cloud_icon_indicator"
                 app:layout_constraintStart_toEndOf="@+id/cloud_icon_indicator"
-                app:layout_constraintTop_toTopOf="@id/cloud_icon_indicator" />
+                app:layout_constraintTop_toTopOf="@id/cloud_icon_indicator"
+                app:layout_constraintVertical_bias="0.3" />
 
             <TextView
                 android:id="@+id/cloud_description_text"

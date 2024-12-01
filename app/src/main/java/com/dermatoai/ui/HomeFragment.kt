@@ -15,13 +15,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.dermatoai.R
 import com.dermatoai.databinding.FragmentHomeBinding
 import com.dermatoai.helper.HistoryListAdapter
 import com.dermatoai.helper.Resource
 import com.dermatoai.model.AnalyzeViewModel
 import com.dermatoai.model.HomeViewModel
-import com.dermatoai.oauth.OauthPreferences
+import com.dermatoai.oauth.GoogleAuthenticationRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +38,7 @@ class HomeFragment : Fragment() {
     private val analyzeViewModel: AnalyzeViewModel by viewModels()
 
     @Inject
-    lateinit var oauthPreferences: OauthPreferences
+    lateinit var oauthPreferences: GoogleAuthenticationRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,7 +60,7 @@ class HomeFragment : Fragment() {
 
         binding.settingButton.setOnClickListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                oauthPreferences.removeToken()
+                oauthPreferences.removeCredential()
                 oauthPreferences.getToken().collect {
                     if (it.isNullOrEmpty()) {
                         requireActivity().startActivity(
@@ -100,6 +101,24 @@ class HomeFragment : Fragment() {
             }
         }.addOnFailureListener {
             Log.e("Location", "Error: ${it.message}")
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            oauthPreferences.getProfilePicture().collect {
+                Glide.with(requireContext())
+                    .load(it)
+                    .into(binding.profileImage)
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            oauthPreferences.getNickname().collect {
+                binding.nicknameText.text = it
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            oauthPreferences.getAccountName().collect {
+                binding.accountName.text = it
+            }
         }
 
         homeViewModel.climateInfo.observe(viewLifecycleOwner) { resource ->
