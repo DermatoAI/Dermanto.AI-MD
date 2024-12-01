@@ -16,6 +16,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@android:color/transparent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:0.1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@id/tab_layout_view" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/history_empty_anima"
+        android:id="@+id/analyze_loading_anima"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="20dp"

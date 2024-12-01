@@ -2,6 +2,7 @@ package com.dermatoai.model
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.dermatoai.helper.Resource
@@ -23,6 +24,13 @@ class AnalyzeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val userId = oauthPreferences.getToken()
+
+    private val _imageUri = MutableLiveData<Uri?>()
+    val imageCaptureUri: LiveData<Uri?> = _imageUri
+
+    fun setImageUri(uri: Uri?) {
+        _imageUri.value = uri
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val history: LiveData<List<AnalyzeHistoryData>> = userId.flatMapLatest { userId ->
