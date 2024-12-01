@@ -13,4 +13,8 @@ class ApiModule {
     @Provides
     @Singleton
     fun dermatoEndpoint(): DermatoEndpoint = DermatoClient.service
+
+    @Provides
+    @Singleton
+    fun openMeteoEndpoint(): OpenMeteoEndpoint = OpenMeteoClient.service
 }

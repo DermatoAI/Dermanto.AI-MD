@@ -59,36 +59,29 @@
 
             <ImageView
                 android:id="@+id/cloud_icon_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/cloud_sunny_icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/weather_cloud_for_unknown_30"
                 app:layout_constraintBottom_toTopOf="@id/card_line"
                 app:layout_constraintStart_toStartOf="@id/card_container"
-                app:layout_constraintTop_toTopOf="@id/card_container" />
+                app:layout_constraintTop_toTopOf="@id/card_container"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/temperature_number_text"
-                android:layout_width="64dp"
+                android:layout_width="wrap_content"
                 android:layout_height="61dp"
-                android:layout_marginEnd="32dp"
+                app:layout_constraintHorizontal_bias="0.9"
                 android:text="@string/dummy_60"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="48sp"
                 app:layout_constraintBottom_toTopOf="@id/card_line"
                 app:layout_constraintEnd_toEndOf="@id/card_container"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/card_container" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:padding="1dp"
-                app:layout_constraintEnd_toEndOf="@id/temperature_number_text"
-                app:layout_constraintTop_toTopOf="@id/temperature_number_text"
-                app:shapeAppearanceOverlay="@style/ImageView.Circle"
-                app:strokeColor="@color/white"
-                app:strokeWidth="1dp" />
 
 
             <TextView
@@ -96,14 +89,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
                 android:text="@string/dummy_sun_type"
                 android:textAppearance="@style/TextAppearance.SemiBold"
                 android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@id/cloud_icon_indicator"
+                app:layout_constraintVertical_bias="0.3"
+                app:layout_constraintBottom_toBottomOf="@+id/cloud_icon_indicator"
+                app:layout_constraintStart_toEndOf="@+id/cloud_icon_indicator"
                 app:layout_constraintTop_toTopOf="@id/cloud_icon_indicator" />
 
             <TextView
+                android:id="@+id/cloud_description_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -186,7 +181,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="27dp"
+                        android:layout_marginStart="30dp"
                         android:text="@string/dummy_60"
                         android:textSize="12sp" />
 
@@ -238,7 +233,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="25dp"
+                        android:layout_marginStart="30dp"
                         android:text="@string/dummy_60"
                         android:textSize="12sp" />
 
@@ -247,18 +242,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/wind" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="10dp"
-                        android:layout_gravity="bottom"
-                        android:layout_marginStart="40dp"
-                        android:layout_marginBottom="3dp"
-                        android:backgroundTint="@color/white"
-                        android:text="@string/force_unit"
-                        android:textSize="5sp"
-                        tools:ignore="SmallSp" />
-
                 </FrameLayout>
 
                 <TextView
@@ -292,7 +275,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="23dp"
+                        android:layout_marginStart="25dp"
                         android:text="@string/dummy_60"
                         android:textSize="12sp" />
 
@@ -301,15 +284,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/temperature_04" />
-
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="3dp"
-                        android:layout_gravity="top"
-                        android:layout_marginStart="35dp"
-                        android:layout_marginTop="3dp"
-                        android:background="@drawable/ellipse_43"
-                        android:backgroundTint="@color/white" />
 
                 </FrameLayout>
 
@@ -322,45 +296,6 @@
                     android:textColor="@color/white_70"
                     android:textSize="12sp" />
             </FrameLayout>
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="78dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toStartOf="@+id/guideline7"
-                app:layout_constraintGuide_begin="173dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="331dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="16dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="77dp"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintGuide_end="251dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="96dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

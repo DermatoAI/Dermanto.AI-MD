@@ -8,7 +8,7 @@ import retrofit2.http.POST
  */
 interface DermatoEndpoint {
     @POST("register")
-    fun regisUser(): Call<Unit>
+    suspend fun regisUser(): Call<Unit>
 
     @POST("authorize")
     fun authorizeUser(): Call<Unit>
@@ -17,7 +17,7 @@ interface DermatoEndpoint {
     fun getClimateInfo(): Call<ClimateInfoBRS>
 
     @POST("analyze")
-    fun analyzeImage(): Response<AnalyzeImage>
+    suspend fun analyzeImage(): Response<AnalyzeImage>
 
     @POST("chatbot")
     fun askChatBot(): Call<ChatBRQS>
