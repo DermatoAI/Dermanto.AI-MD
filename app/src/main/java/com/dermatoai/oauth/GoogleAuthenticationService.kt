@@ -70,6 +70,7 @@ class GoogleAuthenticationService @Inject constructor(
 
                 data.user?.let {
                     repository.saveToken(googleIdTokenCredential.idToken)
+                    repository.saveUserId(googleIdTokenCredential.id)
                     googleIdTokenCredential.profilePictureUri?.let { pp ->
                         repository.saveProfilePicture(pp)
                     }

@@ -23,7 +23,7 @@ class AnalyzeViewModel @Inject constructor(
     oauthPreferences: OauthPreferences
 ) : ViewModel() {
 
-    private val userId = oauthPreferences.getToken()
+    private val userId = oauthPreferences.getUserId()
 
     private val _imageUri = MutableLiveData<Uri?>()
     val imageCaptureUri: LiveData<Uri?> = _imageUri
