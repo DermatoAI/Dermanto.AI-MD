@@ -2,16 +2,19 @@ package com.dermatoai.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialException
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.dermatoai.R
 import com.dermatoai.databinding.FragmentSignInBinding
 import com.dermatoai.oauth.GoogleAuthenticationService
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
@@ -67,6 +70,19 @@ class SignInFragment : Fragment() {
                             )
                         )
                         requireActivity().finish()
+                    }, { error ->
+                        Log.e("SIGN IN", error.message.toString())
+                        if (error is GetCredentialException) {
+                            Snackbar.make(
+                                view,
+                                "Credential cannot found by app",
+                                Snackbar.LENGTH_LONG
+                            )
+                                .show()
+                            return@doSignIn
+                        }
+                        Snackbar.make(view, error.message.toString(), Snackbar.LENGTH_LONG)
+                            .show()
                     }
                 )
             }

@@ -46,7 +46,7 @@
     <string name="humidity_text">Humidity</string>
     <string name="dummy_sun_type_desc">Sun with a cool</string>
     <string name="dummy_sun_type">Cloud</string>
-    <string name="celsius_format">%1$.1f° C</string>
+    <string name="celsius_format">%1$.0f° C</string>
     <string name="degree_format">%1$.0f°</string>
     <string name="percent_format">%1$d%%</string>
     <string name="speed_format">%1$.1f m/s</string>
