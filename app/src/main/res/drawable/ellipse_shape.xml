@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFFFFF"/> <!-- Optional: Set the background color -->
+    <corners android:radius="20dp"/> <!-- Set the radius to create a circular or elliptical effect -->
+    <!--    <size-->
+    <!--        android:width="96dp" &lt;!&ndash; Adjust width for eliptical effect &ndash;&gt;-->
+    <!--    android:height="48dp" /> &lt;!&ndash; Adjust height for eliptical effect &ndash;&gt;-->
+</shape>
