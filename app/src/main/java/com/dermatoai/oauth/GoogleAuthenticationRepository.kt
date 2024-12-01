@@ -26,6 +26,16 @@ class GoogleAuthenticationRepository @Inject constructor(
         return preferences.getToken()
     }
 
+    suspend fun saveUserId(id: String) {
+        withContext(Dispatchers.IO) {
+            preferences.saveUserId(id)
+        }
+    }
+
+    fun saveUserId(): Flow<String?> {
+        return preferences.getUserId()
+    }
+
     suspend fun saveNickname(name: String) {
         withContext(Dispatchers.IO) {
             preferences.saveNickname(name)

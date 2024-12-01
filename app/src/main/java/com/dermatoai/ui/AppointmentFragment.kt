@@ -11,12 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentAppointmentBinding
 import com.dermatoai.helper.FinishedAppointmentListAdapter
-import com.dermatoai.model.AppointmentData
 import com.dermatoai.model.AppointmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @AndroidEntryPoint
 class AppointmentFragment : Fragment() {
@@ -41,46 +37,19 @@ class AppointmentFragment : Fragment() {
         }
 
         viewModel.historyAppointment.observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                binding.apply {
+            if (it.isNullOrEmpty()) {
+                with(binding) {
                     finishedContainerList.visibility = GONE
                     historyEmptyAnima.visibility = VISIBLE
                 }
             } else {
-                binding.apply {
+                with(binding){
                     finishedContainerList.visibility = VISIBLE
                     historyEmptyAnima.visibility = GONE
                 }
+                finishedListAdapter.submitList(it)
             }
         }
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-        val finishedList = listOf(
-            AppointmentData(
-                date = dateFormat.parse("2024-12-01 09:00") ?: Date(),
-                doctor = "Dr. John Smith"
-            ),
-            AppointmentData(
-                date = dateFormat.parse("2024-12-02 14:30") ?: Date(),
-                doctor = "Dr. Sarah Connor"
-            ),
-            AppointmentData(
-                date = dateFormat.parse("2024-12-03 11:00") ?: Date(),
-                doctor = "Dr. Emily Davis"
-            ),
-            AppointmentData(
-                date = dateFormat.parse("2024-12-04 16:00") ?: Date(),
-                doctor = "Dr. Michael Brown"
-            ),
-            AppointmentData(
-                date = dateFormat.parse("2024-12-05 10:15") ?: Date(),
-                doctor = "Dr. Anna Garcia"
-            ),
-            AppointmentData(
-                date = dateFormat.parse("2024-12-06 13:45") ?: Date(),
-                doctor = "Dr. David Wilson"
-            )
-        )
-//        finishedListAdapter.submitList(finishedList)
     }
 
 }

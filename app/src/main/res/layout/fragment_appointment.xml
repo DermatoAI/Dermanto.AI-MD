@@ -71,15 +71,17 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="20dp"
-        app:layout_constraintBottom_toBottomOf="@id/finished_container_list"
+        android:layout_marginTop="36dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="@id/finished_container_list"
-        app:layout_constraintStart_toStartOf="@id/finished_container_list"
-        app:layout_constraintTop_toTopOf="@id/finished_container_list"
-        app:layout_constraintVertical_bias="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title2_finished_text"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/schedule_empty_anima" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/finished_container_list"
@@ -91,9 +93,10 @@
         android:elevation="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title2_finished_text" />
-
+        app:layout_constraintTop_toBottomOf="@id/title2_finished_text"
+        app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="63dp"
