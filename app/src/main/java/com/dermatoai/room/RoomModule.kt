@@ -20,7 +20,8 @@ class RoomModule {
             context,
             DermatoDatabase::class.java,
             "app_database"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

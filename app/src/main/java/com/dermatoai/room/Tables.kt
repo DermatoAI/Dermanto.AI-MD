@@ -22,7 +22,7 @@ data class DiagnoseRecord(
 
 @Entity(tableName = "appointments")
 data class AppointmentRecord(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val id: Int,
     val time: Date,
     @ColumnInfo(name = "doctor_name")
