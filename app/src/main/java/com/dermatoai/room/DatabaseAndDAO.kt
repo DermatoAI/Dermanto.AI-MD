@@ -14,7 +14,7 @@ import java.util.Date
     entities = [
         DiagnoseRecord::class,
         AppointmentRecord::class
-    ], version = 1, exportSchema = false
+    ], version = 2, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class DermatoDatabase : RoomDatabase() {
@@ -30,7 +30,7 @@ class Converters {
 
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
+        return date?.time
     }
 }
 
@@ -49,8 +49,14 @@ interface DiagnoseRecordDAO {
 @Dao
 interface AppointmentRecordDAO {
     @Insert
-    fun addA(newDiagnoseRecord: DiagnoseRecord)
+    fun add(newDiagnoseRecord: DiagnoseRecord)
 
     @Query("select * from appointments where user_id_ref = :userid")
     fun getAll(userid: String): Flow<List<AppointmentRecord>>
+
+    @Query("select * from appointments where user_id_ref = :userid and time > :now order by time limit 1")
+    fun getUpcoming(userid: String, now: Date): Flow<AppointmentRecord>
+
+    @Query("delete from appointments where id = :id and user_id_ref = :userid and time > :now")
+    fun delete(userid: String, id: String, now: Date): Int
 }

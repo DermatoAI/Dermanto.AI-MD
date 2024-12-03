@@ -32,4 +32,23 @@ class AppointmentViewModel @Inject constructor(
             flowOf(emptyList())
         }
     }.asLiveData()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val getUpcoming: LiveData<AppointmentData?> = userId.flatMapLatest { userId ->
+        if (userId != null) {
+            appointmentRepository.getUpcomingAppointment(userId).map { record ->
+                AppointmentData(record.time, record.doctorName)
+            }
+        } else {
+            flowOf(null)
+        }
+    }.asLiveData()
+
+    suspend fun removeAppointment(id: String) {
+        userId.collect { userId ->
+            userId?.let { appointmentRepository.deleteUpcomingAppointment(it, id) }
+        }
+    }
+
+
 }

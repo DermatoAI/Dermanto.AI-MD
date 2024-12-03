@@ -2,7 +2,6 @@ package com.dermatoai.helper
 
 import android.icu.text.DateFormat
 import android.view.LayoutInflater
-import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.ListAdapter
@@ -31,7 +30,6 @@ class FinishedAppointmentListAdapter :
         fun bind(item: AppointmentData?) {
             item?.let {
                 with(binding) {
-                    appointmentMeetButton.visibility = GONE
                     appointmentDateText.text = dateFormat.format(it.date)
                     doctorNameText.text = it.doctor
 

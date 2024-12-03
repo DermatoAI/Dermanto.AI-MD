@@ -8,24 +8,12 @@ data class Response<T>(
     val result: T
 )
 
-data class ClimateInfoBRS(
-    val sunType: String,
-    val temperature: Int,
-    val humidity: Int,
-    val force: Int,
-    val uvScale: Int,
-)
-
 data class AnalyzeImage(
     val confidence: Int,
     val diagnosis: String,
     val timestamp: Date,
     val image: String,
     val treatmentSuggestions: String,
-)
-
-data class ChatBRQS(
-    val text: String,
 )
 
 data class Weather(
@@ -55,4 +43,16 @@ data class DailyWeather(
     val uviMax: List<Double>,
     @SerializedName("uv_index_clear_sky_max")
     val uviSkyMax: List<Double>
+)
+
+data class AppointmentResponse(
+    @SerializedName("message") val message: String,
+    @SerializedName("data") val data: AppointmentData
+)
+
+data class AppointmentData(
+    @SerializedName("user_id") val userId: String,
+    @SerializedName("doctor_id") val doctorId: String,
+    @SerializedName("appointment_date") val appointmentDate: Date,
+    @SerializedName("status") val status: String
 )
