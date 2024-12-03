@@ -1,6 +1,6 @@
 package com.dermatoai.helper
 
-import android.icu.text.DateFormat
+import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dermatoai.databinding.AppointmentCardBinding
 import com.dermatoai.model.AppointmentData
 import com.dermatoai.model.AppointmentData.Companion.DIFF_UTIL
+import java.util.Locale
 
 /**
  * Adapter class that used for generated view component for RecycleView component.
@@ -18,10 +19,8 @@ class FinishedAppointmentListAdapter :
     /**
      * class that will representative to each view will create with specific data.
      * @param binding
-     * @property dateFormat
      */
     class ViewModel(val binding: AppointmentCardBinding) : RecyclerView.ViewHolder(binding.root) {
-        private val dateFormat: DateFormat = DateFormat.getInstance()
 
         /**
          * after created view it will bind with this method that responsibility for adding data to view component.
@@ -30,7 +29,8 @@ class FinishedAppointmentListAdapter :
         fun bind(item: AppointmentData?) {
             item?.let {
                 with(binding) {
-                    appointmentDateText.text = dateFormat.format(it.date)
+                    appointmentDateText.text =
+                        SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(it.date)
                     doctorNameText.text = it.doctor
 
                     val constraintSet = ConstraintSet()
