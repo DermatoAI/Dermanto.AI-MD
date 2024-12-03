@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.dermatoai.R
 import com.dermatoai.databinding.FragmentHomeBinding
-import com.dermatoai.helper.HistoryListAdapter
+import com.dermatoai.helper.DiagnosisRecordListAdapter
 import com.dermatoai.helper.Resource
 import com.dermatoai.model.AnalyzeViewModel
 import com.dermatoai.model.HomeViewModel
@@ -54,7 +54,7 @@ class HomeFragment : Fragment() {
         checkLocationPermission()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
-        val historyListAdapter = HistoryListAdapter()
+        val historyListAdapter = DiagnosisRecordListAdapter()
         binding.historyRecycleView.adapter = historyListAdapter
         binding.historyRecycleView.layoutManager = LinearLayoutManager(requireContext())
 
