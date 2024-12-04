@@ -47,6 +47,14 @@ android {
             "String", "OPENMETEO_SERVER_URL",
             "\"${properties["openmeteo.server.url"]?.toString()}\""
         )
+        buildConfigField(
+            "String", "GEMINI_API_KEY",
+            "\"${properties["gemini.api.key"]?.toString()}\""
+        )
+        buildConfigField(
+            "String", "GEMINI_MODEL_TYPE",
+            "\"${properties["gemini.model.type"]?.toString()}\""
+        )
     }
 
     buildFeatures {
@@ -130,6 +138,8 @@ dependencies {
     implementation(libs.googleid)
 
     implementation(libs.lottie)
+
+    implementation(libs.generativeai)
 }
 /*
 configure dokka
