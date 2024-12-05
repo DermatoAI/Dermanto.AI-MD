@@ -3,18 +3,19 @@ package com.dermatoai.api
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
-data class Response<T>(
-    val userId: String,
-    val result: T
-)
+data class ImageAnalysisResponse(
+    val message: String,
+    val result: Result,
+    val userId: String
+) {
 
-data class AnalyzeImage(
-    val confidence: Int,
-    val diagnosis: String,
-    val timestamp: Date,
-    val image: String,
-    val treatmentSuggestions: String,
-)
+    data class Result(
+        val diagnosis: String,
+        val confidence: Float,
+        val imageId: String,
+        val timestamp: Date
+    )
+}
 
 data class Weather(
     @SerializedName("current")

@@ -10,10 +10,13 @@ import com.dermatoai.oauth.OauthPreferences
 import com.dermatoai.repository.AnalyzeRepository
 import com.dermatoai.room.DiagnoseRecord
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -24,6 +27,7 @@ class AnalyzeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val userId = oauthPreferences.getUserId()
+    private val tokenId = oauthPreferences.getToken()
 
     private val _imageUri = MutableLiveData<Uri?>()
     val imageCaptureUri: LiveData<Uri?> = _imageUri
@@ -47,15 +51,19 @@ class AnalyzeViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun currentAnalyzeImage(image: Uri): LiveData<Resource<DiagnoseRecord>> =
-        userId.flatMapLatest { userId ->
-            if (userId != null) {
-                analyzeRepository.analyzeImage(image, userId)
-                    .catch {
-                        emit(Resource.Error(it))
-                    }
-            } else {
-                flowOf(Resource.Error(RuntimeException("User Id not exits")))
+        tokenId.flatMapLatest { token ->
+            userId.flatMapLatest { userId ->
+                if (userId != null && token != null) {
+                    analyzeRepository.analyzeImage(image, userId, token)
+                        .catch {
+                            emit(Resource.Error(it))
+                        }
+                } else {
+                    flowOf(Resource.Error(RuntimeException("User Id not exits")))
+                }
             }
-        }.asLiveData()
+        }.distinctUntilChanged()
+            .flowOn(Dispatchers.IO)
+            .asLiveData()
 
 }

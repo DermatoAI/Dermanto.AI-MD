@@ -30,7 +30,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.dermatoai.R
 import com.dermatoai.databinding.FragmentCaptureBinding
-import com.dermatoai.model.AnalyzeViewModel
 import com.dermatoai.model.CaptureViewModel
 import com.dermatoai.ui.ResultActivity.Companion.IMAGE_URL
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +41,6 @@ class CaptureFragment : Fragment() {
     private var cameraDirection: Int = CameraSelector.LENS_FACING_BACK
 
     private val captureViewModel: CaptureViewModel by viewModels()
-    private val analyzeViewModel: AnalyzeViewModel by viewModels()
 
     private lateinit var cameraProvider: ProcessCameraProvider
     private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
@@ -108,7 +106,7 @@ class CaptureFragment : Fragment() {
 
         captureViewModel.imageCaptureUri.observe(viewLifecycleOwner) { uri ->
             uri?.let {
-                stopCamera()
+                cameraStop()
                 imageUriExits = true
                 imageUri = uri
                 with(binding) {
@@ -151,7 +149,7 @@ class CaptureFragment : Fragment() {
             } else {
                 CameraSelector.LENS_FACING_BACK
             }
-            stopCamera()
+            cameraStop()
             cameraSetup()
         }
 
@@ -168,7 +166,7 @@ class CaptureFragment : Fragment() {
         }
 
         binding.galleryButton.setOnClickListener {
-            stopCamera()
+            cameraStop()
             pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
@@ -186,7 +184,7 @@ class CaptureFragment : Fragment() {
 
         binding.flashButton.setOnClickListener {
             captureViewModel.changeFlashState(flashState)
-            stopCamera()
+            cameraStop()
         }
 
         binding.lensDirectionButton.setOnClickListener {
@@ -205,16 +203,15 @@ class CaptureFragment : Fragment() {
 
     }
 
-    private fun stopCamera() {
-        if (::cameraProvider.isInitialized) {
-            cameraProvider.unbindAll()
-            orientationEventListener.disable()
-        }
-    }
 
     override fun onStop() {
         super.onStop()
-        stopCamera()
+        cameraStop()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        cameraStop()
     }
 
     override fun onResume() {
@@ -224,6 +221,12 @@ class CaptureFragment : Fragment() {
         }
     }
 
+    private fun cameraStop() {
+        if (::cameraProvider.isInitialized) {
+            cameraProvider.unbindAll()
+            orientationEventListener.disable()
+        }
+    }
     private fun cameraSetup() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
