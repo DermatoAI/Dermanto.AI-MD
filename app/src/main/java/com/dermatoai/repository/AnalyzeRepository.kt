@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import com.dermatoai.api.DermatoEndpoint
+import com.dermatoai.genativeai.GeminiService
 import com.dermatoai.helper.networkBoundResource
 import com.dermatoai.room.DiagnoseRecord
 import com.dermatoai.room.DiagnoseRecordDAO
@@ -20,8 +21,9 @@ class AnalyzeRepository @Inject constructor(
     @ApplicationContext val context: Context,
     private val dao: DiagnoseRecordDAO,
     private val fetch: DermatoEndpoint,
+    private val geminiService: GeminiService,
 ) {
-    fun analyzeImage(uri: Uri, userid: String) = networkBoundResource(
+    fun analyzeImage(uri: Uri, userid: String, tokenId: String) = networkBoundResource(
         query = {
             dao.getLatest(userid)
         },
@@ -34,19 +36,21 @@ class AnalyzeRepository @Inject constructor(
                     file.name,
                     file.asRequestBody("image/jpeg".toMediaType())
                 )
-            fetch.analyzeImage(requestFile)
+            val analyzeImage = fetch.analyzeImage(requestFile, tokenId)
+            val additionalInfo = geminiService.generateAdditionalInfo(analyzeImage.result.diagnosis)
+            Pair(analyzeImage, additionalInfo)
         },
         saveFetchResult = { response ->
-            response.result.apply {
+            response.apply {
                 dao.add(
                     DiagnoseRecord(
                         0,
-                        confidence,
-                        diagnosis,
-                        timestamp,
-                        image,
-                        treatmentSuggestions,
-                        userid
+                        first.result.confidence.toInt(),
+                        first.result.diagnosis,
+                        first.result.timestamp,
+                        first.result.imageId,
+                        second.text ?: "No information can be displayed",
+                        first.userId
                     )
                 )
             }

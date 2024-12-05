@@ -58,21 +58,9 @@ class HomeFragment : Fragment() {
         binding.historyRecycleView.adapter = historyListAdapter
         binding.historyRecycleView.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.settingButton.setOnClickListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                oauthPreferences.removeCredential()
-                oauthPreferences.getToken().collect {
-                    if (it.isNullOrEmpty()) {
-                        requireActivity().startActivity(
-                            Intent(
-                                binding.root.context,
-                                LoginActivity::class.java
-                            )
-                        )
-                        requireActivity().finish()
-                    }
-                }
-            }
+        binding.settingAndInfoButton.setOnClickListener {
+            val intent = Intent(requireContext(), SettingAndInfoActivity::class.java)
+            requireActivity().startActivity(intent)
         }
 
         homeViewModel.recordList.observe(viewLifecycleOwner) {
