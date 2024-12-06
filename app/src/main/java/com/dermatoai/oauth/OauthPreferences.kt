@@ -79,6 +79,7 @@ class OauthPreferences @Inject constructor(private val dataStore: DataStore<Pref
     suspend fun removeCredential() {
         dataStore.edit {
             it[this.token] = ""
+            it[this.userId] = ""
             it[this.profilePicture] = ""
             it[this.nickname] = ""
             it[this.accountName] = ""
