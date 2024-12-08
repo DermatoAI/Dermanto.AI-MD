@@ -47,6 +47,7 @@ class AppointmentFragment : Fragment() {
             adapter = finishedListAdapter
             layoutManager = LinearLayoutManager(context)
         }
+        binding.toolbar.root.title = "Dermato Connect"
 
         viewModel.historyAppointment.observe(viewLifecycleOwner) {
             if (it.isNullOrEmpty()) {
@@ -84,7 +85,8 @@ class AppointmentFragment : Fragment() {
 
             datePicker.addOnPositiveButtonClickListener { selection ->
                 val date =
-                    java.text.SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(selection)
+                    java.text.SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+                        .format(selection)
                 dateInput.setText(date)
             }
 

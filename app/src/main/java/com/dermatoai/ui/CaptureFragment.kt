@@ -28,6 +28,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.dermatoai.DermatoAI.Companion.FROM_ACTIVITY
 import com.dermatoai.R
 import com.dermatoai.databinding.FragmentCaptureBinding
 import com.dermatoai.model.CaptureViewModel
@@ -157,6 +158,7 @@ class CaptureFragment : Fragment() {
             if (imageUriExits) {
                 val intent = Intent(requireActivity(), ResultActivity::class.java)
                 intent.putExtra(IMAGE_URL, imageUri.toString())
+                intent.putExtra(FROM_ACTIVITY, "CAPTURE")
                 startActivity(intent)
             } else {
                 captureImage { uri ->
@@ -227,6 +229,7 @@ class CaptureFragment : Fragment() {
             orientationEventListener.disable()
         }
     }
+
     private fun cameraSetup() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
 
