@@ -16,6 +16,7 @@ import java.util.Date
  * @property score
  */
 data class AnalyzeHistoryData(
+    val id: Int,
     val date: Date,
     val issue: String,
     val score: Int
@@ -26,7 +27,7 @@ data class AnalyzeHistoryData(
                 oldItem: AnalyzeHistoryData,
                 newItem: AnalyzeHistoryData
             ): Boolean =
-                oldItem.date == newItem.date
+                oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: AnalyzeHistoryData,

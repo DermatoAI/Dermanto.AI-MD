@@ -13,6 +13,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
@@ -23,7 +24,7 @@ class AnalyzeRepository @Inject constructor(
     private val fetch: DermatoEndpoint,
     private val geminiService: GeminiService,
 ) {
-    fun analyzeImage(uri: Uri, userid: String, tokenId: String) = networkBoundResource(
+    fun analyzeImage(uri: Uri, userid: String) = networkBoundResource(
         query = {
             dao.getLatest(userid)
         },
@@ -36,28 +37,34 @@ class AnalyzeRepository @Inject constructor(
                     file.name,
                     file.asRequestBody("image/jpeg".toMediaType())
                 )
-            val analyzeImage = fetch.analyzeImage(requestFile, tokenId)
-            val additionalInfo = geminiService.generateAdditionalInfo(analyzeImage.result.diagnosis)
-            Pair(analyzeImage, additionalInfo)
+            val userIdBody = userid.toRequestBody("text/plain".toMediaType())
+            fetch.analyzeImage(requestFile, userIdBody)
         },
         saveFetchResult = { response ->
             response.apply {
+                val additionalInfo: String =
+                    geminiService.generateAdditionalInfo(data.diagnosis).text
+                        ?: "No Additional Info can be found"
+                print(additionalInfo)
                 dao.add(
-                    DiagnoseRecord(
-                        0,
-                        first.result.confidence.toInt(),
-                        first.result.diagnosis,
-                        first.result.timestamp,
-                        first.result.imageId,
-                        second.text ?: "No information can be displayed",
-                        first.userId
-                    )
+                    with(response) {
+                        DiagnoseRecord(
+                            0,
+                            confidenceScore = data.confidence.toInt(),
+                            issue = data.diagnosis,
+                            time = data.timestamp,
+                            image = data.imageId,
+                            additionalInfo = additionalInfo,
+                            userId = data.userId
+                        )
+                    }
                 )
             }
         }
     )
 
     fun getAllAnalyzeRecord(userid: String) = dao.getAll(userid)
+    fun getById(id: Int, userid: String) = dao.getById(id, userid)
 
     private fun resizeImage(uri: Uri, context: Context): Bitmap {
         val inputStream = context.contentResolver.openInputStream(uri)

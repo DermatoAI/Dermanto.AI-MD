@@ -6,6 +6,7 @@ plugins {
     /*
     added plugins
      */
+    id("kotlin-parcelize")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.dokka")
@@ -140,6 +141,8 @@ dependencies {
     implementation(libs.lottie)
 
     implementation(libs.generativeai)
+
+    implementation(libs.core)
 }
 /*
 configure dokka

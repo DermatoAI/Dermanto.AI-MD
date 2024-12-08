@@ -39,11 +39,14 @@ interface DiagnoseRecordDAO {
     @Insert
     fun add(newDiagnoseRecord: DiagnoseRecord)
 
-    @Query("select * from diagnoses where user_id_ref = :userid")
-    fun getAll(userid: String): Flow<List<DiagnoseRecord>>
+    @Query("select * from diagnoses where user_id_ref = :userId order by time desc")
+    fun getAll(userId: String): Flow<List<DiagnoseRecord>>
 
     @Query("select * from diagnoses where user_id_ref = :userId order by time desc limit 1")
     fun getLatest(userId: String): Flow<DiagnoseRecord>
+
+    @Query("select * from diagnoses where user_id_ref = :userId and id = :id")
+    fun getById(id: Int, userId: String): Flow<DiagnoseRecord>
 }
 
 @Dao

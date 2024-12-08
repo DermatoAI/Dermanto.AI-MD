@@ -1,5 +1,6 @@
 package com.dermatoai.helper
 
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dermatoai.R
 import com.dermatoai.databinding.DiagnosisRecordCardBinding
 import com.dermatoai.model.AnalyzeHistoryData
+import com.dermatoai.ui.ResultActivity
 import java.util.Locale
 
 class DiagnosisRecordListAdapter :
@@ -25,6 +27,13 @@ class DiagnosisRecordListAdapter :
                     historyIssueText.text = it.issue
                     historyAccurateText.text =
                         binding.root.context.getString(R.string.confidence_score_template, it.score)
+                }
+            }
+
+            binding.root.setOnClickListener {
+                Intent(binding.root.context, ResultActivity::class.java).apply {
+                    putExtra(ResultActivity.DIAGNOSE_INFO, item?.id)
+                    binding.root.context.startActivity(this)
                 }
             }
         }

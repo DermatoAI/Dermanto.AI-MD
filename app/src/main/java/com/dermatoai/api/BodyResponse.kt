@@ -4,15 +4,22 @@ import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class ImageAnalysisResponse(
+    @SerializedName("message")
     val message: String,
-    val result: Result,
-    val userId: String
+    @SerializedName("data")
+    val data: Result,
 ) {
 
     data class Result(
+        @SerializedName("userId")
+        val userId: String,
+        @SerializedName("diagnosis")
         val diagnosis: String,
-        val confidence: Float,
+        @SerializedName("confidence")
+        val confidence: Double,
+        @SerializedName("imageId")
         val imageId: String,
+        @SerializedName("timestamp")
         val timestamp: Date
     )
 }

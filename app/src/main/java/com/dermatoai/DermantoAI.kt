@@ -9,4 +9,8 @@ import dagger.hilt.android.HiltAndroidApp
  * This class is annotated with `@HiltAndroidApp`, enabling Hilt for dependency injection throughout the app.
  */
 @HiltAndroidApp
-class DermatoAI : Application()
+class DermatoAI : Application() {
+    companion object {
+        const val FROM_ACTIVITY = "FROM_ACTIVITY"
+    }
+}

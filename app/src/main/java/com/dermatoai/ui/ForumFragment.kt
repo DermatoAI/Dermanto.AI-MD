@@ -1,21 +1,13 @@
 package com.dermatoai.ui
 
-import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import com.dermatoai.R
 import com.dermatoai.databinding.FragmentForumBinding
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.activity.result.contract.ActivityResultContracts
 
 @AndroidEntryPoint
 class ForumFragment : Fragment() {
@@ -23,12 +15,13 @@ class ForumFragment : Fragment() {
     private lateinit var binding: FragmentForumBinding
 
     // Register for activity result to pick an image
-    private val selectImageResult = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri?.let {
-            binding.imageViewUploaded.setImageURI(uri)
-            binding.imageViewUploaded.visibility = View.VISIBLE
+    private val selectImageResult =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let {
+                binding.imageViewUploaded.setImageURI(uri)
+                binding.imageViewUploaded.visibility = View.VISIBLE
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -64,6 +57,6 @@ class ForumFragment : Fragment() {
 //        }
 //
 //        return binding.root
-        return TODO("Provide the return value")
+        return binding.root
     }
 }

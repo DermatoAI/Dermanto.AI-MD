@@ -5,6 +5,8 @@ import com.dermatoai.api.DermatoClient.retrofit
 import com.dermatoai.api.DermatoClient.service
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -20,11 +22,18 @@ object DermatoClient {
         .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         .create()
 
+    private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        })
+        .build()
+
     /**
      *variable that used to build to service with base URL from server.
      */
     private var retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.DERMATO_SERVER_URL)
+        .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 

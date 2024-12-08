@@ -2,7 +2,6 @@ package com.dermatoai.model
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.dermatoai.helper.Resource
@@ -27,21 +26,13 @@ class AnalyzeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val userId = oauthPreferences.getUserId()
-    private val tokenId = oauthPreferences.getToken()
-
-    private val _imageUri = MutableLiveData<Uri?>()
-    val imageCaptureUri: LiveData<Uri?> = _imageUri
-
-    fun setImageUri(uri: Uri?) {
-        _imageUri.value = uri
-    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val history: LiveData<List<AnalyzeHistoryData>> = userId.flatMapLatest { userId ->
         if (userId != null) {
             analyzeRepository.getAllAnalyzeRecord(userId).map { records ->
                 records.map {
-                    AnalyzeHistoryData(it.time, it.issue, it.confidenceScore)
+                    AnalyzeHistoryData(it.id, it.time, it.issue, it.confidenceScore)
                 }
             }
         } else {
@@ -50,17 +41,33 @@ class AnalyzeViewModel @Inject constructor(
     }.asLiveData()
 
     @OptIn(ExperimentalCoroutinesApi::class)
+    fun getAnalyzeResult(id: Int): LiveData<AnalyzeImageInfo?> = userId.flatMapLatest { userId ->
+        if (userId != null) {
+            analyzeRepository.getById(id, userId).map { record ->
+                AnalyzeImageInfo(
+                    record.confidenceScore,
+                    record.issue,
+                    record.time,
+                    Uri.parse(record.image),
+                    record.additionalInfo
+                )
+            }
+        } else {
+            flowOf(null)
+        }
+    }.asLiveData()
+
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun currentAnalyzeImage(image: Uri): LiveData<Resource<DiagnoseRecord>> =
-        tokenId.flatMapLatest { token ->
-            userId.flatMapLatest { userId ->
-                if (userId != null && token != null) {
-                    analyzeRepository.analyzeImage(image, userId, token)
-                        .catch {
-                            emit(Resource.Error(it))
-                        }
-                } else {
-                    flowOf(Resource.Error(RuntimeException("User Id not exits")))
-                }
+        userId.flatMapLatest { userId ->
+            if (userId != null) {
+                analyzeRepository.analyzeImage(image, userId)
+                    .catch {
+                        emit(Resource.Error(it))
+                    }
+            } else {
+                flowOf(Resource.Error(RuntimeException("User Id not exits")))
             }
         }.distinctUntilChanged()
             .flowOn(Dispatchers.IO)

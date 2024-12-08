@@ -36,6 +36,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
+    private var longitude: Double = 0.0
+    private var latitude: Double = 0.0
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: FragmentHomeBinding
 
@@ -102,8 +104,8 @@ class HomeFragment : Fragment() {
         }
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             if (location != null) {
-                val latitude = location.latitude
-                val longitude = location.longitude
+                latitude = location.latitude
+                longitude = location.longitude
                 homeViewModel.requestClimateInfo(latitude, longitude)
                 Log.d("Location", "Lat: $latitude, Lon: $longitude")
             } else {
@@ -171,7 +173,6 @@ class HomeFragment : Fragment() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // Request the permissions
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(
