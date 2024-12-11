@@ -11,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class BaseActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBaseBinding
-    private var isSignIn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +18,6 @@ class BaseActivity : AppCompatActivity() {
         binding = ActivityBaseBinding.inflate(layoutInflater)
         with(binding) {
             setContentView(root)
-
             val navHostFragment =
                 supportFragmentManager.findFragmentById(R.id.base_fragment) as NavHostFragment
             val navController = navHostFragment.navController

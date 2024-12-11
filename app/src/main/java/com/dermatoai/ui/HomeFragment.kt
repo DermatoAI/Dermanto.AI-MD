@@ -2,7 +2,6 @@ package com.dermatoai.ui
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -11,7 +10,8 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -36,13 +36,49 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
-    private var longitude: Double = 0.0
-    private var latitude: Double = 0.0
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: FragmentHomeBinding
 
     private val homeViewModel: HomeViewModel by viewModels()
     private val analyzeViewModel: AnalyzeViewModel by viewModels()
+
+    private val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+        .setWaitForAccurateLocation(false)
+        .setMinUpdateIntervalMillis(500)
+        .build()
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+            val location = locationResult.lastLocation
+            if (location != null) {
+                homeViewModel.putCurrentLocation(location)
+                Log.d(
+                    "Location",
+                    "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
+                )
+                fusedLocationClient.removeLocationUpdates(this)
+            }
+        }
+    }
+
+    private lateinit var requestMultiplePermissions: ActivityResultLauncher<Array<String>>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requestMultiplePermissions = registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            if (permissions.all { it.value }) {
+                Log.d("Permissions", "All permissions granted.")
+                startLocationUpdates()
+            } else {
+                Log.e("Permissions", "Permission denied.")
+            }
+        }
+    }
 
     @Inject
     lateinit var oauthPreferences: GoogleAuthenticationRepository
@@ -53,14 +89,18 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkLocationPermission()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        uiBind()
+        observerSection()
+    }
 
+    private fun uiBind() {
         val historyListAdapter = DiagnosisRecordListAdapter()
         binding.historyRecycleView.adapter = historyListAdapter
         binding.historyRecycleView.layoutManager = LinearLayoutManager(requireContext())
@@ -80,46 +120,20 @@ class HomeFragment : Fragment() {
             }
             historyListAdapter.submitList(it)
         }
+    }
 
-        analyzeViewModel.history.observe(viewLifecycleOwner) {
-            homeViewModel.putRecordList(it)
-        }
-        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
-            .setWaitForAccurateLocation(false)
-            .setMinUpdateIntervalMillis(500)
-            .build()
-
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                val location = locationResult.lastLocation
-                if (location != null) {
-                    Log.d(
-                        "Location",
-                        "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
-                    )
-                    fusedLocationClient.removeLocationUpdates(this)
-                }
-            }
-        }
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                latitude = location.latitude
-                longitude = location.longitude
-                homeViewModel.requestClimateInfo(latitude, longitude)
-                Log.d("Location", "Lat: $latitude, Lon: $longitude")
-            } else {
-                Log.e("Location", "Fail to get location")
-                fusedLocationClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    Looper.getMainLooper()
+    private fun observerSection() {
+        homeViewModel.currentLocation.observe(viewLifecycleOwner) { currentLocation ->
+            currentLocation?.run {
+                homeViewModel.requestClimateInfo(
+                    latitude,
+                    longitude
                 )
             }
-        }.addOnFailureListener {
-            Log.e("Location", "Error: ${it.message}")
         }
-
+        analyzeViewModel.history.observe(viewLifecycleOwner) {
+            homeViewModel.putCurrentLocation(it)
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             oauthPreferences.getProfilePicture().collect {
                 Glide.with(requireContext())
@@ -164,23 +178,35 @@ class HomeFragment : Fragment() {
     }
 
     private fun checkLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                requireContext(),
+        requestMultiplePermissions.launch(
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                LOCATION_PERMISSION_REQUEST_CODE
             )
+        )
+    }
+
+
+    private fun startLocationUpdates() {
+        try {
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+            Log.d("Location", "Location updates started")
+        } catch (e: SecurityException) {
+            Log.e("Location Updates Error", "Failed to request location updates", e)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try {
+            fusedLocationClient.removeLocationUpdates(locationCallback)
+            Log.d("Location", "Location updates stopped")
+        } catch (e: Exception) {
+            Log.e("Location", "Error while stopping location updates", e)
         }
     }
 

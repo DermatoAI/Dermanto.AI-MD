@@ -24,6 +24,13 @@ data class ImageAnalysisResponse(
     )
 }
 
+data class ChatResponse(
+    @SerializedName("response")
+    val message: String,
+    @SerializedName("error")
+    val error: String
+)
+
 data class Weather(
     @SerializedName("current")
     val current: CurrentWeather,

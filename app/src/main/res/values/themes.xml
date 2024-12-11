@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.DermatoAI" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.DermatoAI" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <!--        <item name="colorPrimary">@color/primary</item>-->
         <!--                <item name="colorPrimaryVariant">@color/white</item>-->
@@ -17,7 +17,6 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.DermatoAI" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primaryDark</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -39,6 +38,30 @@
     <style name="ImageView.Circle" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="SenderChatStyle" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeTopRight">8dp</item>
+        <item name="cornerSizeBottomLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="SenderCardShape" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/SenderChatStyle</item>
+    </style>
+
+    <style name="ReceiveChatStyle" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">8dp</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">16dp</item>
+    </style>
+
+    <style name="ReceiveCardShape" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ReceiveCardShape</item>
     </style>
 
     <style name="ImageView.Rounded.NotBottomRight" parent="ImageView.Circle">

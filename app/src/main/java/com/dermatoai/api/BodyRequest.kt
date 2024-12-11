@@ -8,3 +8,7 @@ data class AppointmentRequest(
     @SerializedName("appointment_date") val appointmentDate: String,
     @SerializedName("status") val status: String
 )
+
+data class ChatRequest(
+    @SerializedName("message") val message: String
+)

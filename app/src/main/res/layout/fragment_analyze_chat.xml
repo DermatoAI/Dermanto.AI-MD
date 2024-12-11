@@ -7,10 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".ui.AnalyzeChatAIFragment">
 
+    <View
+        android:id="@+id/card_line"
+        android:layout_width="0dp"
+        android:layout_height="3dp"
+        android:alpha="0.7"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@id/container_text_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.99" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_text_input"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:0.19"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,30 +35,47 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/send_icon_button"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="12dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="1dp"
+            android:background="@color/accent"
+            android:scaleType="centerInside"
             android:src="@drawable/send_24px"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/text_input_layout"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@id/text_input_layout"
+            app:shapeAppearanceOverlay="@style/ImageView.Circle" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginHorizontal="15dp"
             android:layout_marginVertical="8dp"
+            android:hint="@string/type_a_message_hint"
+            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:boxStrokeColor="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/send_icon_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.MaterialComponents.SmallComponent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/message_text_input"
                 android:layout_width="match_parent"
-                android:textSize="12sp"
                 android:layout_height="match_parent"
-                android:textColor="@color/white" />
+                android:imeOptions="actionSend"
+                android:inputType="textMultiLine"
+                android:maxLines="3"
+                android:minLines="1"
+                android:textSize="12sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
