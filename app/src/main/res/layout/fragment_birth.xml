@@ -43,6 +43,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/month_input_layout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         android:layout_width="143dp"
         android:layout_height="68dp"
         android:layout_marginTop="20dp"
@@ -53,18 +54,20 @@
         app:layout_constraintTop_toBottomOf="@id/text1_text_view"
         app:layout_constraintVertical_bias="0">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/month_input_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
+            android:layout_height="match_parent"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/date_input_layout"
-        android:layout_width="79dp"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
         android:layout_height="68dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:hint="@string/date_input_text_placeholder"
         app:layout_constraintBottom_toTopOf="@id/text2_text_view"
@@ -73,18 +76,19 @@
         app:layout_constraintTop_toBottomOf="@id/text1_text_view"
         app:layout_constraintVertical_bias="0">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/date_input_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
+            android:layout_height="match_parent"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/year_input_layout"
-        android:layout_width="79dp"
+        android:layout_width="0dp"
         android:layout_height="68dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:hint="@string/year_input_text_placeholder"
         app:layout_constraintBottom_toTopOf="@id/text2_text_view"
@@ -96,8 +100,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/year_input_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
+            android:layout_height="match_parent"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView

@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -37,24 +38,24 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CaptureFragment : Fragment() {
+    private lateinit var binding: FragmentCaptureBinding
+
     @Volatile
     private var flashState = ImageCapture.FLASH_MODE_OFF
     private var cameraDirection: Int = CameraSelector.LENS_FACING_BACK
 
     private val captureViewModel: CaptureViewModel by viewModels()
-
     private lateinit var cameraProvider: ProcessCameraProvider
+
     private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
     private lateinit var pickMediaLauncher: ActivityResultLauncher<PickVisualMediaRequest>
-    private lateinit var binding: FragmentCaptureBinding
-    private var permissionGranted = false
     private lateinit var previewView: PreviewView
-    private var imageUriExits: Boolean = false
-    private lateinit var imageUri: Uri
-    private lateinit var imageCapture: ImageCapture
+
+    private var imageUri: Uri? = null
+    private var imageCapture: ImageCapture? = null
 
     private val orientationEventListener by lazy {
-        object : OrientationEventListener(binding.root.context) {
+        object : OrientationEventListener(requireContext()) {
             override fun onOrientationChanged(orientation: Int) {
                 if (orientation == ORIENTATION_UNKNOWN) {
                     return
@@ -65,7 +66,7 @@ class CaptureFragment : Fragment() {
                     in 225 until 315 -> Surface.ROTATION_90
                     else -> Surface.ROTATION_0
                 }
-                imageCapture.targetRotation = rotation
+                imageCapture?.targetRotation = rotation
             }
 
         }
@@ -80,7 +81,6 @@ class CaptureFragment : Fragment() {
 
         cameraPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                permissionGranted = isGranted
                 if (isGranted) {
                     Toast.makeText(requireContext(), "Permission granted", Toast.LENGTH_SHORT)
                         .show()
@@ -97,18 +97,74 @@ class CaptureFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCaptureBinding.inflate(inflater, container, false)
-        previewView = binding.previewImage
-        binding.resetButton.visibility = GONE
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        uiBind()
+        observerSection()
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+        } else {
+            cameraSetup()
+        }
 
+    }
+
+
+    private fun uiBind() {
+        with(binding) {
+            previewView = previewImage
+            binding.resetButton.visibility = GONE
+
+            captureButton.setOnClickListener {
+                imageUri?.let {
+                    val intent = Intent(requireActivity(), ResultActivity::class.java)
+                    intent.putExtra(IMAGE_URL, it.toString())
+                    intent.putExtra(FROM_ACTIVITY, "CAPTURE")
+                    startActivity(intent)
+                } ?: captureImage { uri ->
+                    captureViewModel.setImageUri(uri)
+                }
+
+            }
+
+            galleryButton.setOnClickListener {
+                cameraStop()
+                pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+
+            resetButton.setOnClickListener {
+                captureViewModel.setImageUri(null)
+                with(binding) {
+                    previewImageCapture.visibility = GONE
+                    previewImage.visibility = VISIBLE
+                    captureButton.setImageResource(0)
+                }
+                cameraSetup()
+                resetButton.visibility = GONE
+            }
+
+            flashButton.setOnClickListener {
+                captureViewModel.changeFlashState(flashState)
+                cameraStop()
+            }
+
+            lensDirectionButton.setOnClickListener {
+                captureViewModel.setLensState(cameraDirection)
+            }
+        }
+    }
+
+    private fun observerSection() {
         captureViewModel.imageCaptureUri.observe(viewLifecycleOwner) { uri ->
             uri?.let {
                 cameraStop()
-                imageUriExits = true
                 imageUri = uri
                 with(binding) {
                     previewImageCapture.apply {
@@ -154,73 +210,17 @@ class CaptureFragment : Fragment() {
             cameraSetup()
         }
 
-        binding.captureButton.setOnClickListener {
-            if (imageUriExits) {
-                val intent = Intent(requireActivity(), ResultActivity::class.java)
-                intent.putExtra(IMAGE_URL, imageUri.toString())
-                intent.putExtra(FROM_ACTIVITY, "CAPTURE")
-                startActivity(intent)
-            } else {
-                captureImage { uri ->
-                    captureViewModel.setImageUri(uri)
-                }
-            }
-        }
-
-        binding.galleryButton.setOnClickListener {
-            cameraStop()
-            pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        binding.resetButton.setOnClickListener {
-            captureViewModel.setImageUri(null)
-            imageUriExits = false
-            with(binding) {
-                previewImageCapture.visibility = GONE
-                previewImage.visibility = VISIBLE
-                captureButton.setImageResource(0)
-            }
-            cameraSetup()
-            binding.resetButton.visibility = GONE
-        }
-
-        binding.flashButton.setOnClickListener {
-            captureViewModel.changeFlashState(flashState)
-            cameraStop()
-        }
-
-        binding.lensDirectionButton.setOnClickListener {
-            captureViewModel.setLensState(cameraDirection)
-        }
-
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-        } else {
-            cameraSetup()
-        }
-
     }
 
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroyView() {
+        super.onDestroyView()
         cameraStop()
     }
 
-    override fun onPause() {
-        super.onPause()
-        cameraStop()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!::cameraProvider.isInitialized and !imageUriExits) {
-            cameraSetup()
-        }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        imageCapture?.targetRotation = previewView.display.rotation
     }
 
     private fun cameraStop() {
@@ -232,6 +232,7 @@ class CaptureFragment : Fragment() {
 
     private fun cameraSetup() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        orientationEventListener.enable()
 
         cameraProviderFuture.addListener({
             cameraProvider = cameraProviderFuture.get()
@@ -241,6 +242,7 @@ class CaptureFragment : Fragment() {
 
             imageCapture = ImageCapture.Builder()
                 .setFlashMode(flashState)
+                .setTargetRotation(previewView.display.rotation) // Set target rotation here
                 .build()
 
             val cameraSelector = CameraSelector.Builder()
@@ -264,12 +266,10 @@ class CaptureFragment : Fragment() {
     }
 
     private fun captureImage(captureHandler: (Uri?) -> Unit) {
-        if (!::imageCapture.isInitialized) {
+        if (imageCapture == null) {
             Toast.makeText(requireContext(), "Camera is not ready", Toast.LENGTH_SHORT).show()
             return
         }
-
-        orientationEventListener.enable()
 
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, "DermatoAI-${System.currentTimeMillis()}")
@@ -283,7 +283,7 @@ class CaptureFragment : Fragment() {
             contentValues
         ).build()
 
-        imageCapture.takePicture(
+        imageCapture?.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {

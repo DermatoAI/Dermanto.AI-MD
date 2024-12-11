@@ -10,6 +10,7 @@ import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.NoCredentialException
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -38,8 +39,48 @@ class GoogleAuthenticationService @Inject constructor(
                     request = request,
                     context = context,
                 )
-                handleSignIn(result)
+                performSignIn(result) { googleIdTokenCredential, authResult ->
+                    authResult.user?.let {
+                        repository.saveToken(googleIdTokenCredential.idToken)
+                        repository.saveUserId(googleIdTokenCredential.id)
+                        googleIdTokenCredential.profilePictureUri?.let { pp ->
+                            repository.saveProfilePicture(pp)
+                        }
+                        it.displayName?.let { name -> repository.saveNickname(name) }
+                        it.displayName?.let { name -> repository.saveAccountName(name) }
+                    }
+                }
                 success()
+            } catch (e: GetCredentialCancellationException) {
+                handleFailure(e)
+                error(e)
+            } catch (e: NoCredentialException) {
+                handleFailure(e)
+                error(e)
+            } catch (e: GetCredentialException) {
+                error(e)
+            }
+        }
+    }
+
+    suspend fun doSignUp(
+        context: Context,
+        request: GetCredentialRequest,
+        success: (String) -> Unit,
+        error: (Throwable) -> Unit = {}
+    ) {
+        val credentialManager = CredentialManager.create(context)
+        withContext(Dispatchers.IO) {
+            try {
+                val result = credentialManager.getCredential(
+                    request = request,
+                    context = context,
+                )
+                performSignIn(result) { googleIdTokenCredential, authResult ->
+                    authResult.user?.let {
+                        success(googleIdTokenCredential.id)
+                    }
+                }
             } catch (e: GetCredentialCancellationException) {
                 handleFailure(e)
                 error(e)
@@ -56,7 +97,10 @@ class GoogleAuthenticationService @Inject constructor(
         Log.e(TAG, "Authentication ERROR: ${error.errorMessage}")
     }
 
-    private suspend fun handleSignIn(result: GetCredentialResponse) {
+    private suspend fun performSignIn(
+        result: GetCredentialResponse,
+        success: suspend (GoogleIdTokenCredential, AuthResult) -> Unit
+    ) {
         val credential = result.credential
 
         if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
@@ -68,15 +112,8 @@ class GoogleAuthenticationService @Inject constructor(
                     GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
                 val data = Firebase.auth.signInWithCredential(firebaseCredential).await()
 
-                data.user?.let {
-                    repository.saveToken(googleIdTokenCredential.idToken)
-                    repository.saveUserId(googleIdTokenCredential.id)
-                    googleIdTokenCredential.profilePictureUri?.let { pp ->
-                        repository.saveProfilePicture(pp)
-                    }
-                    it.displayName?.let { name -> repository.saveNickname(name) }
-                    it.displayName?.let { name -> repository.saveAccountName(name) }
-                }
+                success(googleIdTokenCredential, data)
+
             } catch (e: GoogleIdTokenParsingException) {
                 Log.e(TAG, "Received an invalid google id token response", e)
             }

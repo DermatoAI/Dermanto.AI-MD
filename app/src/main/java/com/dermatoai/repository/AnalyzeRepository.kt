@@ -3,6 +3,8 @@ package com.dermatoai.repository
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import com.dermatoai.api.DermatoEndpoint
 import com.dermatoai.genativeai.GeminiService
@@ -14,6 +16,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
@@ -45,7 +48,6 @@ class AnalyzeRepository @Inject constructor(
                 val additionalInfo: String =
                     geminiService.generateAdditionalInfo(data.diagnosis).text
                         ?: "No Additional Info can be found"
-                print(additionalInfo)
                 dao.add(
                     with(response) {
                         DiagnoseRecord(
@@ -70,17 +72,50 @@ class AnalyzeRepository @Inject constructor(
         val inputStream = context.contentResolver.openInputStream(uri)
         val originalBitmap = BitmapFactory.decodeStream(inputStream)
 
-        return Bitmap.createScaledBitmap(originalBitmap, 180, 180, true)
+        val exif = ExifInterface(context.contentResolver.openInputStream(uri)!!)
+        val orientation =
+            exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+
+        val rotatedBitmap = when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(originalBitmap, 90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(originalBitmap, 180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(originalBitmap, 270f)
+            else -> originalBitmap
+        }
+
+        return Bitmap.createBitmap(rotatedBitmap)
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap, degrees: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(degrees)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
     private fun bitmapToFile(bitmap: Bitmap, context: Context): File {
+        val compressImage = compressToFileLimit(bitmap, 10)
         val file = File(context.cacheDir, "${System.currentTimeMillis()}.jpg")
 
         val outputStream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+        outputStream.write(compressImage)
         outputStream.flush()
         outputStream.close()
 
         return file
+    }
+
+    fun compressToFileLimit(bitmap: Bitmap, maxSizeInMB: Int): ByteArray {
+        val maxSizeInBytes = maxSizeInMB * 1024 * 1024
+        var quality = 100
+        var compressedData: ByteArray
+
+        do {
+            val outputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+            compressedData = outputStream.toByteArray()
+            quality -= 5
+        } while (compressedData.size > maxSizeInBytes && quality > 0)
+
+        return compressedData
     }
 }

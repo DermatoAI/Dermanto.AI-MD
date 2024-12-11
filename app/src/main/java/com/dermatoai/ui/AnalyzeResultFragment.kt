@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.dermatoai.databinding.FragmentAnalyzeResultBinding
 import com.dermatoai.model.ResultViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,8 +30,12 @@ class AnalyzeResultFragment : Fragment() {
             with(binding) {
                 resultClassifyText.text = it.diagnosis
                 markwon.setMarkdown(resultAdditionalInformationText, it.treatmentSuggestions)
+                val width = resultImage.width
+                val height = resultImage.height
                 Glide.with(requireActivity())
                     .load(it.image)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .override(width, (height * 0.8).toInt())
                     .into(resultImage)
             }
         }

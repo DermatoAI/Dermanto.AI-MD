@@ -21,6 +21,9 @@ interface DermatoEndpoint {
         @Part("userId") userId: RequestBody,
     ): ImageAnalysisResponse
 
+    @POST("chatbot")
+    suspend fun chatApi(@Body chatRequest: ChatRequest): ChatResponse
+
     @POST("appointments/create")
     suspend fun createAppointment(
         @Body appointmentRequest: AppointmentRequest

@@ -55,6 +55,7 @@
         Dermato.AI is an innovative platform that utilizes advanced machine learning to accurately identify skin conditions. By analyzing images of skin concerns, our AI algorithms can quickly and efficiently provide potential diagnoses. This empowers individuals to make informed decisions about their skin health and seek appropriate medical attention.\n\nOur mission is to revolutionize dermatology by making accurate and accessible skin assessments available to everyone. With Dermato.AI, you can streamline the diagnostic process, reduce anxiety, and take proactive steps towards improving your skin health.
     </string>
     <string name="gemini_system_instruction">I am a doctor who analyzes skin diseases and I only need the name of the disease and then provide information about it such as the cause and how to prevent it and what the medicine is. i know ever language but my information must in english as professional doctor</string>
+    <string name="type_a_message_hint">Type a message...</string>
 
 
     <string-array name="dates">

@@ -12,6 +12,7 @@ plugins {
     id("org.jetbrains.dokka")
     id("com.google.gms.google-services")
     id("androidx.room")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
