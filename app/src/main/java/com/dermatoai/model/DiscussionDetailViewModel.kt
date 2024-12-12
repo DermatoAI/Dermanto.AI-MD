@@ -7,6 +7,7 @@ import com.dermatoai.api.TambahKomentarRequest
 import com.dermatoai.repository.DiscussionRepository
 import com.dermatoai.repository.LikesRepository
 import com.dermatoai.room.LikesEntity
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,23 +26,25 @@ class DiscussionDetailViewModel @Inject constructor(
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
-    fun fetchDiscussionDetail(discussionId: Int) {
+    fun fetchDiscussionDetail(discussionId: String) {
         viewModelScope.launch {
-            val result = repository.getListDiscussion()
-            if (result.isSuccess) {
-                val discussion = result.getOrNull()?.data?.find { it.id == discussionId }
-                if (discussion != null) {
-                    _discussionDetail.value = discussion
-                } else {
-                    _error.value = "Discussion not found"
+            val result = repository.getDiscussionById(discussionId)
+            val likes =
+                likesRepository.getLikedPosts(FirebaseAuth.getInstance().uid.orEmpty()).groupBy {
+                    it.discussionId
                 }
+            if (result.isSuccess) {
+                val discussion = result.getOrThrow()
+                _discussionDetail.value = discussion.copy(
+                    isFavorite = likes[discussion.id] != null
+                )
             } else {
                 _error.value = result.exceptionOrNull()?.message
             }
         }
     }
 
-    fun deleteDiscussion(id: Int) {
+    fun deleteDiscussion(id: String) {
         viewModelScope.launch {
             val result = repository.deleteDiscussion(id)
             if (result.isSuccess) {
@@ -52,7 +55,7 @@ class DiscussionDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteComment(commentId: Int) {
+    fun deleteComment(commentId: String) {
         viewModelScope.launch {
             val result = repository.deleteComment(commentId)
             if (result.isSuccess) {
@@ -63,7 +66,7 @@ class DiscussionDetailViewModel @Inject constructor(
         }
     }
 
-    fun addComment(discussionId: Int, content: String, userId: String) {
+    fun addComment(discussionId: String, content: String, userId: String) {
         viewModelScope.launch {
             val request = TambahKomentarRequest(
                 idDiskusi = discussionId,
@@ -84,12 +87,11 @@ class DiscussionDetailViewModel @Inject constructor(
             if (diskusi.isFavorite) {
                 likesRepository.removeLike(
                     LikesEntity(
-                        id = diskusi.id,
+                        discussionId = diskusi.id,
                         judul = diskusi.judul,
                         isi = diskusi.isi,
                         kategori = diskusi.kategori,
-                        penggunaId = diskusi.pengguna.id,
-                        username = diskusi.pengguna.username,
+                        username = diskusi.authorId,
                         timestamp = diskusi.timestamp,
                         jumlahKomentar = diskusi.jumlahKomentar,
                         userId = userId,

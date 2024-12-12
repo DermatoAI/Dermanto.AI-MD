@@ -2,7 +2,6 @@ package com.dermatoai.api
 
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -48,14 +47,19 @@ interface DermatoBackendEndpoint {
         @Part image: MultipartBody.Part
     ): SkinAnalysisResponse
 
-    @POST("/add-diskusi")
+    @Multipart
+    @POST("/api/discussions")
     suspend fun tambahDiskusi(
-        @Body requestBody: TambahDiskusiRequest
+        @Part("title") judul: RequestBody,
+        @Part("content") isi: RequestBody,
+        @Part("category") kategori: RequestBody,
+        @Part("userId") idPengguna: RequestBody,
+        @Part file: MultipartBody.Part?
     ): TambahDiskusiResponse
 
     @DELETE("/hapus-diskusi/{id}")
     suspend fun hapusDiskusi(
-        @Path("id") id: Int
+        @Path("id") id: String
     ): GeneralResponse
 
     @POST("/add-komentar")
@@ -65,9 +69,15 @@ interface DermatoBackendEndpoint {
 
     @DELETE("/hapus-komentar/{id}")
     suspend fun hapusKomentar(
-        @Path("id") id: Int
+        @Path("id") id: String
     ): GeneralResponse
 
-    @GET("/list-diskusi")
+    @GET("/api/discussions/all")
     suspend fun listDiskusi(): ListDiskusiResponse
+
+    @GET("/api/discussions/user/{id}")
+    suspend fun listDiskusiByUser(@Path("id") userId: String): List<Diskusi>
+
+    @GET("/api/discussions/{id}")
+    suspend fun getDiskusi(@Path("id") id: String): Diskusi
 }

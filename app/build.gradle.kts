@@ -13,7 +13,6 @@ plugins {
     id("com.google.gms.google-services")
     id("androidx.room")
     id("androidx.navigation.safeargs.kotlin")
-    id("kotlin-parcelize")
 }
 
 android {
