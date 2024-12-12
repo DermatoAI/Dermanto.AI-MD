@@ -11,6 +11,8 @@ plugins {
     id("org.jetbrains.dokka")
     id("com.google.gms.google-services")
     id("androidx.room")
+    id("kotlin-parcelize")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -128,6 +130,8 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
+
+    implementation(libs.circleimageview)
 
     implementation(libs.lottie)
 }

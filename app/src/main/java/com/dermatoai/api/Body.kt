@@ -1,5 +1,6 @@
 package com.dermatoai.api
 
+import androidx.room.Ignore
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
@@ -55,4 +56,71 @@ data class DailyWeather(
     val uviMax: List<Double>,
     @SerializedName("uv_index_clear_sky_max")
     val uviSkyMax: List<Double>
+)
+
+data class SkinAnalysisResponse(
+    @SerializedName("message") val message: String,
+    @SerializedName("result") val result: Result?,
+    @SerializedName("imageId") val imageId: String?
+)
+
+data class Result(
+    @SerializedName("diagnosis") val diagnosis: String,
+    @SerializedName("confidence") val confidence: String,
+    @SerializedName("treatmentSuggestions") val treatmentSuggestions: String,
+    @SerializedName("timestamp") val timestamp: String
+)
+
+data class ErrorResponse(
+    @SerializedName("error") val error: String
+)
+
+data class TambahDiskusiRequest(
+    @SerializedName("judul") val judul: String,
+    @SerializedName("isi") val isi: String,
+    @SerializedName("kategori") val kategori: String,
+    @SerializedName("id_pengguna") val idPengguna: String
+)
+
+data class TambahDiskusiResponse(
+    @SerializedName("status") val status: String,
+    @SerializedName("id_diskusi") val idDiskusi: Int,
+    @SerializedName("timestamp") val timestamp: String
+)
+
+data class TambahKomentarRequest(
+    @SerializedName("id_diskusi") val idDiskusi: Int,
+    @SerializedName("isi") val isi: String,
+    @SerializedName("id_pengguna") val idPengguna: String
+)
+
+data class TambahKomentarResponse(
+    @SerializedName("status") val status: String,
+    @SerializedName("id_komentar") val idKomentar: Int
+)
+
+data class GeneralResponse(
+    @SerializedName("status") val status: String
+)
+
+data class ListDiskusiResponse(
+    @SerializedName("status") val status: String,
+    @SerializedName("data") val data: List<Diskusi>
+)
+
+data class Diskusi(
+    @SerializedName("id") val id: Int,
+    @SerializedName("judul") val judul: String,
+    @SerializedName("isi") val isi: String,
+    @SerializedName("kategori") val kategori: String,
+    @SerializedName("pengguna") val pengguna: Pengguna,
+    @SerializedName("timestamp") val timestamp: String,
+    @SerializedName("jumlah_komentar") val jumlahKomentar: Int,
+    @SerializedName("images") val images: List<String>,
+    @Ignore val isFavorite: Boolean = false
+)
+
+data class Pengguna(
+    @SerializedName("id") val id: String,
+    @SerializedName("username") val username: String
 )

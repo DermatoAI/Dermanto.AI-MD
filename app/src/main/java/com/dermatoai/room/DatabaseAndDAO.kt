@@ -13,13 +13,15 @@ import java.util.Date
 @Database(
     entities = [
         DiagnoseRecord::class,
-        AppointmentRecord::class
+        AppointmentRecord::class,
+        LikesEntity::class
     ], version = 1, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class DermatoDatabase : RoomDatabase() {
     abstract fun diagnoseRecordDao(): DiagnoseRecordDAO
     abstract fun appointmentRecordDao(): AppointmentRecordDAO
+    abstract fun likeDao(): LikesDao
 }
 
 class Converters {

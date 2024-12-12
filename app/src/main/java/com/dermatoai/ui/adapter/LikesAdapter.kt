@@ -9,34 +9,42 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dermatoai.R
-import com.dermatoai.api.Diskusi
+import com.dermatoai.room.LikesEntity
 
-class DiscussionAdapter(
-    private val onDeleteClick: (Int) -> Unit,
-    private val onItemClick: (Diskusi) -> Unit
-) : ListAdapter<Diskusi, DiscussionAdapter.DiscussionViewHolder>(DiffCallback) {
+class LikesAdapter(
+    private val onDeleteClick: (LikesEntity) -> Unit,
+    private val onItemClick: (LikesEntity) -> Unit,
+    private val onLiked: (LikesEntity) -> Unit
+) : ListAdapter<LikesEntity, LikesAdapter.LikesViewHolder>(DiffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiscussionViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LikesViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_discussion, parent, false)
-        return DiscussionViewHolder(view)
+        return LikesViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: DiscussionViewHolder, position: Int) {
-        holder.bind(getItem(position), onDeleteClick, onItemClick)
+    override fun onBindViewHolder(holder: LikesViewHolder, position: Int) {
+        holder.bind(getItem(position), onDeleteClick, onItemClick, onLiked)
     }
 
-    class DiscussionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class LikesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val usernameTextView: TextView = itemView.findViewById(R.id.tvUsername)
         private val dateTextView: TextView = itemView.findViewById(R.id.tvDate)
         private val descriptionTextView: TextView = itemView.findViewById(R.id.tvDescription)
         private val deleteImageView: ImageView = itemView.findViewById(R.id.ivDelete)
+        private val ivFavorite: ImageView = itemView.findViewById(R.id.ivFavorite)
 
-        fun bind(item: Diskusi, onDeleteClick: (Int) -> Unit, onItemClick: (Diskusi) -> Unit) {
-            usernameTextView.text = item.pengguna.username
+        fun bind(
+            item: LikesEntity,
+            onDeleteClick: (LikesEntity) -> Unit,
+            onItemClick: (LikesEntity) -> Unit,
+            onLiked: (LikesEntity) -> Unit
+        ) {
+            usernameTextView.text = item.username
             dateTextView.text = item.timestamp
             descriptionTextView.text = item.isi
-            deleteImageView.setOnClickListener { onDeleteClick(item.id) }
+            deleteImageView.setOnClickListener { onDeleteClick(item) }
+            ivFavorite.setOnClickListener { onLiked(item) }
             itemView.rootView.setOnClickListener {
                 onItemClick(item)
             }
@@ -44,12 +52,12 @@ class DiscussionAdapter(
     }
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<Diskusi>() {
-            override fun areItemsTheSame(oldItem: Diskusi, newItem: Diskusi): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<LikesEntity>() {
+            override fun areItemsTheSame(oldItem: LikesEntity, newItem: LikesEntity): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Diskusi, newItem: Diskusi): Boolean {
+            override fun areContentsTheSame(oldItem: LikesEntity, newItem: LikesEntity): Boolean {
                 return oldItem == newItem
             }
         }

@@ -1,6 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/neutral">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/neutral"
+        android:padding="24dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/cvPhoto"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvUser"
+            style="@style/Text.Transparent.White"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/text_user"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@id/cvPhoto"
+            app:layout_constraintStart_toStartOf="@id/cvPhoto"
+            app:layout_constraintEnd_toEndOf="@id/cvPhoto" />
+
+        <TextView
+            android:id="@+id/tvUsername"
+            style="@style/Text.Transparent.White"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="kdsalfkasdlf"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@id/tvUser"
+            app:layout_constraintStart_toStartOf="@id/tvUser"
+            app:layout_constraintEnd_toEndOf="@id/tvUser"/>
+
+        <TextView
+            android:id="@+id/tvAge"
+            style="@style/Text.Transparent.White"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="Age: 18"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@id/tvUsername"
+            app:layout_constraintStart_toStartOf="@id/tvUsername"
+            app:layout_constraintEnd_toEndOf="@id/tvUsername" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            style="@style/Text.Transparent.White"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="asdkflaklfalskdflasdklf"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/tvAge"
+            app:layout_constraintStart_toStartOf="@id/cvPhoto" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/neutral" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
