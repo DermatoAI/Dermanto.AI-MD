@@ -1,112 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#5C946E"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/neutral"
     android:orientation="vertical"
     android:padding="30dp">
 
     <!-- Header Title -->
     <TextView
         android:id="@+id/headerTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:background="#2A2D34"
+        android:padding="16dp"
+        android:background="@color/neutral_light"
         android:text="Let’s discuss the skin issues you’re currently experiencing"
         android:textColor="@color/white"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDiscussions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/headerTitle"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        app:tint="@color/white"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <!-- User Info Section -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="76dp"
-        android:layout_marginBottom="16dp"
-        android:elevation="4dp"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="#2A2D34">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="76dp"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:elevation="4dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:padding="16dp"-->
+<!--        android:background="#2A2D34">-->
 
 
-        <ImageView
-            android:layout_width="37dp"
-            android:layout_height="39dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/ellipse_shape"
-            android:scaleType="centerCrop"
-            android:src="" />
+<!--        <ImageView-->
+<!--            android:layout_width="37dp"-->
+<!--            android:layout_height="39dp"-->
+<!--            android:layout_marginEnd="16dp"-->
+<!--            android:background="@drawable/ellipse_shape"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="" />-->
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical">-->
 
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="uswtunhsanah_"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+<!--            <TextView-->
+<!--                android:id="@+id/userName"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="uswtunhsanah_"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="18sp"-->
+<!--                android:textStyle="bold" />-->
 
-            <TextView
-                android:id="@+id/userDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="11/10/2024"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+<!--            <TextView-->
+<!--                android:id="@+id/userDate"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="11/10/2024"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textStyle="bold" />-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
-    <LinearLayout
-        android:layout_width="354dp"
-        android:layout_height="461dp"
-        android:background="#2A2D34"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:ignore="ExtraText">
+<!--    <LinearLayout-->
+<!--        android:layout_width="354dp"-->
+<!--        android:layout_height="461dp"-->
+<!--        android:background="#2A2D34"-->
+<!--        android:orientation="vertical"-->
+<!--        android:padding="16dp"-->
+<!--        tools:ignore="ExtraText">-->
 
-        <!-- EditText for Text Input -->
-        <EditText
-            android:id="@+id/editTextDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/white"
-            android:hint="Enter your skin issue description here..."
-            android:minHeight="48dp"
-            android:padding="16dp"
-            android:textSize="16sp" />
+<!--        &lt;!&ndash; EditText for Text Input &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/editTextDescription"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:background="@color/white"-->
+<!--            android:hint="Enter your skin issue description here..."-->
+<!--            android:minHeight="48dp"-->
+<!--            android:padding="16dp"-->
+<!--            android:textSize="16sp" />-->
 
 
-        <!-- ImageView to display uploaded image -->
+<!--        &lt;!&ndash; ImageView to display uploaded image &ndash;&gt;-->
 
-        android:background="#00796B"
-        android:layout_marginBottom="16dp"
+<!--        android:background="#00796B"-->
+<!--        android:layout_marginBottom="16dp"-->
 
-        <Button
-            android:id="@+id/btnUploadImage"
-            android:layout_width="fill_parent"
-            android:layout_height="64dp"
-            android:text="Upload Image"
-            android:textColor="#FFFFFF" />
+<!--        <Button-->
+<!--            android:id="@+id/btnUploadImage"-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="64dp"-->
+<!--            android:text="Upload Image"-->
+<!--            android:textColor="#FFFFFF" />-->
 
-        <ImageView
-            android:id="@+id/imageViewUploaded"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:contentDescription="Uploaded Image"
-            android:visibility="gone" />
+<!--        <ImageView-->
+<!--            android:id="@+id/imageViewUploaded"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="200dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:contentDescription="Uploaded Image"-->
+<!--            android:visibility="gone" />-->
         <!--        <Button-->
         <!--            android:id="@+id/btnGoToDetail"-->
         <!--            android:layout_width="match_parent"-->
@@ -117,5 +146,5 @@
         <!--            android:layout_marginTop="16dp"-->
         <!--            android:padding="16dp" />-->
 
-    </LinearLayout>
-</LinearLayout>
+<!--    </LinearLayout>-->
+</androidx.constraintlayout.widget.ConstraintLayout>

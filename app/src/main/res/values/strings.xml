@@ -50,6 +50,8 @@
     <string name="degree_format">%1$.0f°</string>
     <string name="percent_format">%1$d%%</string>
     <string name="speed_format">%1$.1f m/s</string>
+    <string name="text_let_s_discuss_the_skin_issues_you_re_currently_experiencing">Let’s discuss the skin issues you’re currently experiencing</string>
+    <string name="text_user">user</string>
 
 
     <string-array name="dates">
