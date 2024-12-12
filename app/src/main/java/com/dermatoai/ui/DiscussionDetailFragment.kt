@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.dermatoai.R
 import com.dermatoai.databinding.FragmentDiscussionDetailBinding
 import com.dermatoai.model.DiscussionDetailViewModel
@@ -38,7 +39,7 @@ class DiscussionDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val discussionId = arguments?.getInt("discussionId") ?: return
+        val discussionId = arguments?.getString("discussionId") ?: return
 
         viewModel.fetchDiscussionDetail(discussionId)
 
@@ -51,15 +52,19 @@ class DiscussionDetailFragment : Fragment() {
         lifecycleScope.launchWhenStarted {
             viewModel.discussionDetail.collect { detail ->
                 detail?.let {
+                    Glide.with(requireContext())
+                        .load(detail.images)
+                        .into(binding.post.ivProfile)
                     binding.tvDiscussionTitle.text = it.judul
-                    binding.post.tvUsername.text = it.pengguna.username
+                    binding.post.tvUsername.text = it.authorId
                     binding.post.tvDate.text = it.timestamp
                     binding.post.tvDescription.text = it.isi
-                    binding.post.ivDelete.visibility = if (it.pengguna.id == FirebaseAuth.getInstance().uid.orEmpty()) {
-                        View.VISIBLE
-                    } else {
-                        View.GONE
-                    }
+                    binding.post.ivDelete.visibility =
+                        if (it.authorId == FirebaseAuth.getInstance().uid.orEmpty()) {
+                            View.VISIBLE
+                        } else {
+                            View.GONE
+                        }
                     binding.post.ivFavorite.setImageDrawable(
                         if (it.isFavorite) {
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite)
@@ -67,8 +72,9 @@ class DiscussionDetailFragment : Fragment() {
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_unfavorite)
                         }
                     )
-                    val imageAdapter = ImageListAdapter(requireContext(), it.images)
-                    binding.post.rvImages.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    val imageAdapter = ImageListAdapter(requireContext(), listOf(it.images))
+                    binding.post.rvImages.layoutManager =
+                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                     binding.post.rvImages.adapter = imageAdapter
                     adapter.submitList(listOf(detail))
                 }
@@ -101,6 +107,13 @@ class DiscussionDetailFragment : Fragment() {
                 )
                 binding.etMessage.text.clear()
             }
+        }
+
+        binding.post.ivFavorite.setOnClickListener {
+            viewModel.like(
+                viewModel.discussionDetail.value!!,
+                FirebaseAuth.getInstance().uid.orEmpty()
+            )
         }
     }
 

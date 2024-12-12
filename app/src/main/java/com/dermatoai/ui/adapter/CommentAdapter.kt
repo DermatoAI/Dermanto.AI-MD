@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dermatoai.api.Diskusi
 import com.dermatoai.databinding.ItemCommentBinding
 
-class CommentAdapter(private val onDeleteClick: (Int) -> Unit) :
+class CommentAdapter(private val onDeleteClick: (String) -> Unit) :
     ListAdapter<Diskusi, CommentAdapter.CommentViewHolder>(CommentDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -25,7 +25,7 @@ class CommentAdapter(private val onDeleteClick: (Int) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(comment: Diskusi) {
-            binding.tvUsername.text = comment.pengguna.username
+            binding.tvUsername.text = comment.authorId
             binding.tvDate.text = comment.timestamp
             binding.tvDescription.text = comment.isi
             binding.ivDelete.setOnClickListener {

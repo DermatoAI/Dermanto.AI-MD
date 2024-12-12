@@ -9,12 +9,11 @@ class LikesRepository @Inject constructor(private val likesDao: LikesDao) {
 
     suspend fun addLike(diskusi: Diskusi, userId: String) {
         val like = LikesEntity(
-            id = diskusi.id,
             judul = diskusi.judul,
             isi = diskusi.isi,
+            discussionId = diskusi.id,
             kategori = diskusi.kategori,
-            penggunaId = diskusi.pengguna.id,
-            username = diskusi.pengguna.username,
+            username = diskusi.authorId,
             timestamp = diskusi.timestamp,
             jumlahKomentar = diskusi.jumlahKomentar,
             userId = userId

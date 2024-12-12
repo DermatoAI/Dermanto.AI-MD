@@ -10,12 +10,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dermatoai.R
 import com.dermatoai.api.Diskusi
 import com.google.firebase.auth.FirebaseAuth
 
 class DiscussionAdapter(
-    private val onDeleteClick: (Int) -> Unit,
+    private val onDeleteClick: (String) -> Unit,
     private val onItemClick: (Diskusi) -> Unit,
     private val onLiked: (Int, Diskusi) -> Unit
 ) : ListAdapter<Diskusi, DiscussionAdapter.DiscussionViewHolder>(DiffCallback) {
@@ -31,6 +32,8 @@ class DiscussionAdapter(
     }
 
     class DiscussionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val ivProfile: ImageView = itemView.findViewById(R.id.ivProfile)
+        private val titleTextView: TextView = itemView.findViewById(R.id.tvTitle)
         private val usernameTextView: TextView = itemView.findViewById(R.id.tvUsername)
         private val dateTextView: TextView = itemView.findViewById(R.id.tvDate)
         private val descriptionTextView: TextView = itemView.findViewById(R.id.tvDescription)
@@ -40,16 +43,20 @@ class DiscussionAdapter(
 
         fun bind(
             item: Diskusi,
-            onDeleteClick: (Int) -> Unit,
+            onDeleteClick: (String) -> Unit,
             onItemClick: (Diskusi) -> Unit,
             onLiked: (Int, Diskusi) -> Unit
         ) {
-            usernameTextView.text = item.pengguna.username
+            Glide.with(itemView.context)
+                .load(item.images)
+                .into(ivProfile)
+            titleTextView.text = item.judul
+            usernameTextView.text = item.authorId
             dateTextView.text = item.timestamp
             descriptionTextView.text = item.isi
             deleteImageView.setOnClickListener { onDeleteClick(item.id) }
             deleteImageView.visibility =
-                if (item.pengguna.id == FirebaseAuth.getInstance().uid.orEmpty()) {
+                if (item.authorId == FirebaseAuth.getInstance().uid.orEmpty()) {
                     View.VISIBLE
                 } else {
                     View.GONE
@@ -67,7 +74,7 @@ class DiscussionAdapter(
             itemView.rootView.setOnClickListener {
                 onItemClick(item)
             }
-            val adapter = ImageListAdapter(itemView.context, item.images)
+            val adapter = ImageListAdapter(itemView.context, listOf(item.images))
             rvImages.layoutManager =
                 LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
             rvImages.adapter = adapter

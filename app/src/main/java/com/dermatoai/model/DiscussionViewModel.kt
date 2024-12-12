@@ -33,16 +33,16 @@ class DiscussionViewModel @Inject constructor(
             _loading.value = true
             val result = repository.getListDiscussion()
             val likes = likesRepository.getLikedPosts(userId).groupBy {
-                "${it.userId}|${it.id}"
+                it.discussionId
             }
             if (result.isSuccess) {
                 val data = result.getOrNull()
                 _discussions.value = data?.copy(
                     data = data.data.map {
                         it.copy(
-                            isFavorite = likes["${it.pengguna.id}|${it.id}"] != null
+                            isFavorite = likes[it.id] != null
                         )
-                    }
+                    }.reversed()
                 )
             } else {
                 _error.value = result.exceptionOrNull()?.message
@@ -54,20 +54,21 @@ class DiscussionViewModel @Inject constructor(
     fun fetchDiscussionsByUserId(userId: String) {
         viewModelScope.launch {
             _loading.value = true
-            val result = repository.getListDiscussion()
+            val result = repository.getListDiscussionUser()
             val likes = likesRepository.getLikedPosts(userId).groupBy {
-                "${it.userId}|${it.id}"
+                it.discussionId
             }
             if (result.isSuccess) {
                 val data = result.getOrNull()
-                _discussions.value = data?.copy(
-                    data = data.data.filter { item ->
-                        item.pengguna.id == userId
-                    }.map {
+                _discussions.value = ListDiskusiResponse(
+                    data = (data?.filter { item ->
+                        item.authorId == userId
+                    }?.map {
                         it.copy(
-                            isFavorite = likes["${it.pengguna.id}|${it.id}"] != null
+                            isFavorite = likes[it.id] != null
                         )
-                    }
+                    } ?: emptyList()).asReversed(),
+                    status = ""
                 )
             } else {
                 _error.value = result.exceptionOrNull()?.message
@@ -76,7 +77,7 @@ class DiscussionViewModel @Inject constructor(
         }
     }
 
-    fun deleteDiscussion(id: Int, userId: String, isFromDiscussion: Boolean) {
+    fun deleteDiscussion(id: String, userId: String, isFromDiscussion: Boolean) {
         viewModelScope.launch {
             _loading.value = true
             val result = repository.deleteDiscussion(id)
@@ -99,11 +100,11 @@ class DiscussionViewModel @Inject constructor(
             if (diskusi.isFavorite) {
                 likesRepository.removeLike(
                     LikesEntity(
-                        id = diskusi.id, judul = diskusi.judul,
+                        discussionId = diskusi.id,
+                        judul = diskusi.judul,
                         isi = diskusi.isi,
                         kategori = diskusi.kategori,
-                        penggunaId = diskusi.pengguna.id,
-                        username = diskusi.pengguna.username,
+                        username = diskusi.authorId,
                         timestamp = diskusi.timestamp,
                         jumlahKomentar = diskusi.jumlahKomentar,
                         userId = userId,

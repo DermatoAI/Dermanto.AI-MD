@@ -12,7 +12,7 @@ import com.dermatoai.R
 import com.dermatoai.api.Diskusi
 
 class PostAdapter(
-    private val onDeleteClick: (Int) -> Unit,
+    private val onDeleteClick: (String) -> Unit,
     private val onItemClick: (Diskusi) -> Unit
 ) : ListAdapter<Diskusi, PostAdapter.PostViewHolder>(DiffCallback) {
 
@@ -32,8 +32,8 @@ class PostAdapter(
         private val descriptionTextView: TextView = itemView.findViewById(R.id.tvDescription)
         private val deleteImageView: ImageView = itemView.findViewById(R.id.ivDelete)
 
-        fun bind(item: Diskusi, onDeleteClick: (Int) -> Unit, onItemClick: (Diskusi) -> Unit) {
-            usernameTextView.text = item.pengguna.username
+        fun bind(item: Diskusi, onDeleteClick: (String) -> Unit, onItemClick: (Diskusi) -> Unit) {
+            usernameTextView.text = item.authorId
             dateTextView.text = item.timestamp
             descriptionTextView.text = item.isi
             deleteImageView.setOnClickListener { onDeleteClick(item.id) }

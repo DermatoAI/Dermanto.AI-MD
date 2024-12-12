@@ -1,26 +1,33 @@
 package com.dermatoai.repository
 
-import com.dermatoai.api.DermatoEndpoint
+import com.dermatoai.api.DermatoBackendEndpoint
 import com.dermatoai.api.Diskusi
 import com.dermatoai.api.GeneralResponse
 import com.dermatoai.api.ListDiskusiResponse
-import com.dermatoai.api.Pengguna
-import com.dermatoai.api.TambahDiskusiRequest
 import com.dermatoai.api.TambahDiskusiResponse
 import com.dermatoai.api.TambahKomentarRequest
 import com.dermatoai.api.TambahKomentarResponse
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class DiscussionRepository @Inject constructor(
-    private val apiService: DermatoEndpoint,
+    private val apiService: DermatoBackendEndpoint,
 ) {
 
-    suspend fun addDiscussion(request: TambahDiskusiRequest): Result<TambahDiskusiResponse> {
+    suspend fun addDiscussion(
+        judul: RequestBody,
+        isi: RequestBody,
+        kategori: RequestBody,
+        idPengguna: RequestBody,
+        file: MultipartBody.Part?
+    ): Result<TambahDiskusiResponse> {
         return withContext(Dispatchers.IO) {
             try {
-                val response = apiService.tambahDiskusi(request)
+                val response = apiService.tambahDiskusi(judul, isi, kategori, idPengguna, file)
                 Result.success(response)
             } catch (e: Exception) {
                 Result.failure(e)
@@ -28,7 +35,7 @@ class DiscussionRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteDiscussion(id: Int): Result<GeneralResponse> {
+    suspend fun deleteDiscussion(id: String): Result<GeneralResponse> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.hapusDiskusi(id)
@@ -50,7 +57,7 @@ class DiscussionRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteComment(id: Int): Result<GeneralResponse> {
+    suspend fun deleteComment(id: String): Result<GeneralResponse> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.hapusKomentar(id)
@@ -64,35 +71,42 @@ class DiscussionRepository @Inject constructor(
     suspend fun getListDiscussion(): Result<ListDiskusiResponse> {
         return withContext(Dispatchers.IO) {
             try {
-//                val response = apiService.listDiskusi()
-                Result.success(
-                    ListDiskusiResponse(
-                        status = "lacus", data = listOf(
-                            Diskusi(
-                                id = 7115,
-                                judul = "solum",
-                                isi = "legimus",
-                                kategori = "aptent",
-                                pengguna = Pengguna(id = "maiestatis", username = "Pansy Humphrey"),
-                                timestamp = "luptatum",
-                                jumlahKomentar = 6717,
-                                isFavorite = false,
-                                images = emptyList()
-                            ),
-                            Diskusi(
-                                id = 8528,
-                                judul = "veri",
-                                isi = "sociosqu",
-                                kategori = "definitiones",
-                                pengguna = Pengguna(id = "sadipscing", username = "Pierre Tate"),
-                                timestamp = "eleifend",
-                                jumlahKomentar = 9811,
-                                isFavorite = false,
-                                images = emptyList()
-                            )
-                        )
-                    )
-                )
+                val response = apiService.listDiskusi()
+                Result.success(response)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    suspend fun getListDiscussionUser(): Result<List<Diskusi>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response =
+                    apiService.listDiskusiByUser(FirebaseAuth.getInstance().uid.orEmpty())
+                Result.success(response)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    suspend fun getDiscussionById(id: String): Result<Diskusi> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getDiskusi(id)
+                Result.success(response)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    suspend fun getComments(id: String): Result<Diskusi> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getDiskusi(id)
+                Result.success(response)
             } catch (e: Exception) {
                 Result.failure(e)
             }
