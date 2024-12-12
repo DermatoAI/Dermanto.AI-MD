@@ -1,5 +1,6 @@
 [versions]
 agp = "8.6.1"
+circleimageview = "3.1.0"
 concurrentFuturesKtx = "1.2.0"
 core = "4.6.2"
 datastorePreferences = "1.1.1"
@@ -52,6 +53,7 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "securityCrypto" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
+circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core = { module = "io.noties.markwon:core", version.ref = "core" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }

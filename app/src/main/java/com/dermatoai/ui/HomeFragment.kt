@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.dermatoai.R
@@ -104,6 +105,11 @@ class HomeFragment : Fragment() {
         val historyListAdapter = DiagnosisRecordListAdapter()
         binding.historyRecycleView.adapter = historyListAdapter
         binding.historyRecycleView.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.profileImage.setOnClickListener {
+            val action = HomeFragmentDirections.actionHomeFragmentToPersonalInformationFragment()
+            findNavController().navigate(action)
+        }
 
         binding.settingAndInfoButton.setOnClickListener {
             val intent = Intent(requireContext(), SettingAndInfoActivity::class.java)

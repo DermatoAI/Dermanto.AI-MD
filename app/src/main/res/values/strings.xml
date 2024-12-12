@@ -50,6 +50,8 @@
     <string name="degree_format">%1$.0f°</string>
     <string name="percent_format">%1$d%%</string>
     <string name="speed_format">%1$.1f m/s</string>
+    <string name="text_let_s_discuss_the_skin_issues_you_re_currently_experiencing">Let’s discuss the skin issues you’re currently experiencing</string>
+    <string name="text_user">user</string>
     <string name="logout_text">LOGOUT</string>
     <string name="about_body_text">
         Dermato.AI is an innovative platform that utilizes advanced machine learning to accurately identify skin conditions. By analyzing images of skin concerns, our AI algorithms can quickly and efficiently provide potential diagnoses. This empowers individuals to make informed decisions about their skin health and seek appropriate medical attention.\n\nOur mission is to revolutionize dermatology by making accurate and accessible skin assessments available to everyone. With Dermato.AI, you can streamline the diagnostic process, reduce anxiety, and take proactive steps towards improving your skin health.
