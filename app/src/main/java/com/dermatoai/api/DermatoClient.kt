@@ -1,8 +1,6 @@
 package com.dermatoai.api
 
 import com.dermatoai.BuildConfig
-import com.dermatoai.api.DermatoClient.retrofit
-import com.dermatoai.api.DermatoClient.service
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -13,8 +11,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * A class that responsible to provide service to fetch the api.
- * @property retrofit
- * @property service
  *
  */
 object DermatoClient {
@@ -31,15 +27,32 @@ object DermatoClient {
     /**
      *variable that used to build to service with base URL from server.
      */
-    private var retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BuildConfig.DERMATO_SERVER_URL)
+    private var analyzeClient: Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.DERMATO_SERVER_URL_ANALYZE)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+    private var backendClient: Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.DERMATO_SERVER_URL_BACKEND)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
+    private var chatbotClient: Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.DERMATO_SERVER_URL_CHATBOT)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+
+
     /**
-     *variable that used to fetch the api with DermatoEndpoint basis.
+     *variable that used to fetch the api with DermatoAnalyzeEndpoint basis.
      * require Interface associated with retrofit schema
      */
-    var service: DermatoEndpoint = retrofit.create(DermatoEndpoint::class.java)
+    var analyzeService: DermatoAnalyzeEndpoint =
+        analyzeClient.create(DermatoAnalyzeEndpoint::class.java)
+    var backendService: DermatoBackendEndpoint =
+        backendClient.create(DermatoBackendEndpoint::class.java)
+    var chatbotService: DermatoChatBotEndpoint =
+        chatbotClient.create(DermatoChatBotEndpoint::class.java)
 }

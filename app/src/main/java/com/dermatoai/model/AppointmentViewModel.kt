@@ -3,9 +3,12 @@ package com.dermatoai.model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
+import com.dermatoai.api.Doctors
 import com.dermatoai.oauth.OauthPreferences
 import com.dermatoai.repository.AppointmentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -25,7 +28,7 @@ class AppointmentViewModel @Inject constructor(
         if (userId != null) {
             appointmentRepository.getAllAppointments(userId).map { record ->
                 record.map {
-                    AppointmentData(it.time, it.doctorName)
+                    AppointmentData(it.time, it.doctorName, "record.location")
                 }
             }
         } else {
@@ -37,7 +40,9 @@ class AppointmentViewModel @Inject constructor(
     val getUpcoming: LiveData<AppointmentData?> = userId.flatMapLatest { userId ->
         if (userId != null) {
             appointmentRepository.getUpcomingAppointment(userId).map { record ->
-                AppointmentData(record.time, record.doctorName)
+                record?.let {
+                    AppointmentData(it.time, it.doctorName, "it.location")
+                }
             }
         } else {
             flowOf(null)
@@ -50,5 +55,12 @@ class AppointmentViewModel @Inject constructor(
         }
     }
 
-
+    val getAllDoctors: LiveData<List<Doctors>> = liveData(Dispatchers.IO) {
+        try {
+            val doctors = appointmentRepository.getAllDoctors().data
+            emit(doctors)
+        } catch (e: Exception) {
+            emit(emptyList())
+        }
+    }
 }
