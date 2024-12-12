@@ -3,7 +3,6 @@ package com.dermatoai.helper
 import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.dermatoai.databinding.AppointmentCardBinding
@@ -27,16 +26,12 @@ class FinishedAppointmentListAdapter :
          * @param item
          */
         fun bind(item: AppointmentData?) {
-            item?.let {
+            item?.let { appoints ->
                 with(binding) {
                     appointmentDateText.text =
-                        SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(it.date)
-                    doctorNameText.text = it.doctor
-
-                    val constraintSet = ConstraintSet()
-                    constraintSet.clone(constraintLayout)
-                    constraintSet.setHorizontalBias(appointmentDetailButton.id, 1f)
-                    constraintSet.applyTo(constraintLayout)
+                        SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(appoints.date)
+                    doctorNameText.text = appoints.doctor
+                    doctorLocationText.text = appoints.location
                 }
             }
         }

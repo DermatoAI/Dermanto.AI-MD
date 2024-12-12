@@ -18,9 +18,10 @@ object DermatoClient {
         .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         .create()
 
+
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BASIC
+            level = HttpLoggingInterceptor.Level.BODY
         })
         .build()
 
@@ -32,6 +33,7 @@ object DermatoClient {
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
+
     private var backendClient: Retrofit = Retrofit.Builder()
         .baseUrl(BuildConfig.DERMATO_SERVER_URL_BACKEND)
         .client(okHttpClient)

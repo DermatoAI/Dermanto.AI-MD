@@ -7,6 +7,8 @@ import com.dermatoai.api.ChatRequest
 import com.dermatoai.helper.ChatData
 import com.dermatoai.repository.ChatbotRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
 
@@ -14,22 +16,34 @@ import javax.inject.Inject
 class ChatAiViewModel @Inject constructor(
     private val repository: ChatbotRepository
 ) : ViewModel() {
-    private val _chatMessages = MutableLiveData<MutableList<ChatData>>(mutableListOf())
+    private val _chatMessages = MutableLiveData<MutableList<ChatData>>()
     val chatMessages: LiveData<MutableList<ChatData>> get() = _chatMessages
 
     fun addMessage(message: ChatData) {
         val currentList = _chatMessages.value ?: mutableListOf()
-        currentList.add(message)
-        _chatMessages.value = currentList
+        val updatedList = currentList.toMutableList() // Create a new instance
+        updatedList.add(message)
+        _chatMessages.value = updatedList // Assign the new list
     }
 
     fun clearMessages() {
         _chatMessages.value = mutableListOf()
     }
 
-    suspend fun requestChatbot(message: String) {
-        repository.requestChatbot(ChatRequest(message)).also {
-            addMessage(ChatData(message, false, Date()))
+    suspend fun requestChatbot(senderMessage: String) {
+        repository.requestChatbot(ChatRequest(senderMessage)).also { response ->
+            response.message?.let {
+                withContext(Dispatchers.Main) {
+
+                    addMessage(ChatData(it, false, Date()))
+                }
+            }
+            response.error?.let {
+                withContext(Dispatchers.Main) {
+
+                    addMessage(ChatData(it, false, Date()))
+                }
+            }
         }
     }
 }

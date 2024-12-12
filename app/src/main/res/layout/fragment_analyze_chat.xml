@@ -7,17 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.AnalyzeChatAIFragment">
 
-    <View
-        android:id="@+id/card_line"
-        android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:alpha="0.7"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@id/container_text_input"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.99" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_text_input"
