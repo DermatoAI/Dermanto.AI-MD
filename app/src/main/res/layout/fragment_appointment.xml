@@ -38,10 +38,11 @@
     <FrameLayout
         android:id="@+id/upcoming_container"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        app:layout_constraintDimensionRatio="1:0.45"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title1_upcoming_text">
@@ -51,6 +52,14 @@
             layout="@layout/appointment_card"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title1_upcoming_text" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:backgroundTint="#d9534f"
+            android:text="@string/cancel_text" />
 
     </FrameLayout>
 
@@ -105,6 +114,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@color/accent"
+        android:elevation="100dp"
         android:scaleType="centerInside"
         android:src="@drawable/icons8_stethoscope"
         app:layout_constraintBottom_toBottomOf="parent"

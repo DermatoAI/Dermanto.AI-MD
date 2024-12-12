@@ -57,6 +57,9 @@
     <string name="gemini_system_instruction">I am a doctor who analyzes skin diseases and I only need the name of the disease and then provide information about it such as the cause and how to prevent it and what the medicine is. i know ever language but my information must in english as professional doctor</string>
     <string name="type_a_message_hint">Type a message...</string>
 
+    <string name="location_adding">Location: %1$s</string>
+    <string name="cancel_text">Cancel</string>
+
 
     <string-array name="dates">
         <item>1</item>

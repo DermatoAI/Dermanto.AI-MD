@@ -14,8 +14,10 @@ import java.util.Date
  * @property DIFF_UTIL used for ListAdapter
  */
 data class AppointmentData(
+    val id: String,
     val date: Date,
     val doctor: String,
+    val location: String
 ) {
     companion object {
         val DIFF_UTIL = object : DiffUtil.ItemCallback<AppointmentData>() {
@@ -23,7 +25,7 @@ data class AppointmentData(
                 oldItem: AppointmentData,
                 newItem: AppointmentData
             ): Boolean =
-                oldItem == newItem
+                oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: AppointmentData,

@@ -8,12 +8,15 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentAnalyzeChatBinding
 import com.dermatoai.helper.ChatData
 import com.dermatoai.model.ChatAiViewModel
 import com.dermatoai.model.ChatListAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -157,6 +160,7 @@ class AnalyzeChatAIFragment : Fragment() {
     private fun observeSection() {
         viewModel.chatMessages.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+            binding.chatContainerList.smoothScrollToPosition(it.size - 1)
         }
     }
 
@@ -171,9 +175,9 @@ class AnalyzeChatAIFragment : Fragment() {
             val message = binding.messageTextInput.text.toString()
             viewModel.addMessage(ChatData(message, true, Date()))
             print(message)
-//            lifecycleScope.launch {
-//                viewModel.requestChatbot(message)
-//            }
+            lifecycleScope.launch(Dispatchers.IO) {
+                viewModel.requestChatbot(message)
+            }
             binding.messageTextInput.text?.clear()
         }
     }

@@ -26,9 +26,9 @@ data class ImageAnalysisResponse(
 
 data class ChatResponse(
     @SerializedName("response")
-    val message: String,
+    val message: String?,
     @SerializedName("error")
-    val error: String
+    val error: String?
 )
 
 data class Weather(
@@ -66,20 +66,21 @@ data class AppointmentResponse(
 )
 
 data class AppointmentData(
+    @SerializedName("id") val id: String?,
     @SerializedName("user_id") val userId: String,
     @SerializedName("doctor_id") val doctorId: String,
     @SerializedName("appointment_date") val appointmentDate: Date,
-    @SerializedName("status") val status: String
+    @SerializedName("status") val status: String,
 )
 
 data class DoctorsResponse(
     @SerializedName("message")
     val message: String,
     @SerializedName("data")
-    val data: List<Doctors>
+    val data: List<Doctor>
 )
 
-data class Doctors(
+data class Doctor(
     @SerializedName("id")
     val id: String,
     @SerializedName("name")

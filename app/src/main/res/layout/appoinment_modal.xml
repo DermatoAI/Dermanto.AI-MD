@@ -1,97 +1,105 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/neutral_light"
-    android:minWidth="350dp"
-    android:padding="30dp">
+    android:padding="24dp">
 
+    <!-- ImageView for the Stethoscope Icon -->
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:contentDescription="@string/dummy_sun_type_desc"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/icons8_stethoscope" />
 
+    <!-- Create New Appointment Text -->
     <TextView
         android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="Create New"
+        android:layout_marginTop="12dp"
+        android:text="Create New Appointment"
+        android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
+    <!-- Date Input Field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/date_input_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="15dp"
         android:hint="Date"
         android:textColorHint="@color/white"
         app:boxCornerRadiusTopEnd="8dp"
         app:boxCornerRadiusTopStart="8dp"
         app:boxStrokeWidth="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/date_picker_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.05">
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.1">
 
         <EditText
             android:id="@+id/dateInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:clickable="true"
             android:focusable="false"
-            android:inputType="none"
+            android:focusableInTouchMode="false"
+            android:inputType="date"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textColor="@color/white"
             android:textColorHint="#9E9E9E" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Date Picker Button -->
     <ImageView
         android:id="@+id/date_picker_button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/baseline_date_range_24"
         android:backgroundTint="@color/white"
         android:scaleType="centerInside"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
         app:layout_constraintBottom_toBottomOf="@+id/date_input_edit_text"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintTop_toTopOf="@+id/date_input_edit_text" />
 
+    <!-- Time Input Field -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/time_input_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="15dp"
         android:hint="Time"
         android:textColorHint="@color/white"
         app:boxCornerRadiusTopEnd="8dp"
         app:boxCornerRadiusTopStart="8dp"
+
         app:boxStrokeWidth="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/time_picker_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_input_edit_text"
-        app:layout_constraintVertical_bias="0.2">
+        app:layout_constraintVertical_bias="0.1">
 
         <EditText
             android:id="@+id/timeInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
             android:focusable="false"
+            android:focusableInTouchMode="false"
             android:inputType="none"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -99,31 +107,62 @@
             android:textColorHint="#9E9E9E" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Time Picker Button -->
     <ImageView
         android:id="@+id/time_picker_button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/baseline_access_time_24"
         android:backgroundTint="@color/white"
         android:scaleType="centerInside"
-        android:scaleX="0.7"
-        android:scaleY="0.7"
         app:layout_constraintBottom_toBottomOf="@+id/time_input_edit_text"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintTop_toTopOf="@+id/time_input_edit_text" />
 
+    <!-- Doctor Name Input Field -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/doctor_name_input_edit_text"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Doctor's Name"
+        android:textColorHint="@color/white"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:boxStrokeWidth="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time_input_edit_text"
+        app:layout_constraintVertical_bias="0.1">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/doctor_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:popupTheme="@style/Base.Theme.DermatoAI"
+            android:textColor="@color/white"
+            android:textColorHint="#9E9E9E" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Create Appointment Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/create_appointment_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="OK"
-        app:cornerRadius="10dp"
+        android:layout_marginTop="24dp"
+        android:text="Create Appointment"
+        android:textColor="@color/white"
+        app:cornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_input_edit_text" />
-
+        app:layout_constraintTop_toBottomOf="@+id/doctor_name_input_edit_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

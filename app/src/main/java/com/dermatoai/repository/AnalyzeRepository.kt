@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
-import com.dermatoai.api.DermatoEndpoint
+import com.dermatoai.api.DermatoAnalyzeEndpoint
 import com.dermatoai.genativeai.GeminiService
 import com.dermatoai.helper.networkBoundResource
 import com.dermatoai.room.DiagnoseRecord
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class AnalyzeRepository @Inject constructor(
     @ApplicationContext val context: Context,
     private val dao: DiagnoseRecordDAO,
-    private val fetch: DermatoEndpoint,
+    private val fetch: DermatoAnalyzeEndpoint,
     private val geminiService: GeminiService,
 ) {
     fun analyzeImage(uri: Uri, userid: String) = networkBoundResource(
