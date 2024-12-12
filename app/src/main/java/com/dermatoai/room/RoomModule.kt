@@ -32,4 +32,8 @@ class RoomModule {
     fun provideAppointmentRecordDao(database: DermatoDatabase): AppointmentRecordDAO =
         database.appointmentRecordDao()
 
+    @Provides
+    fun provideLikeDao(database: DermatoDatabase): LikesDao =
+        database.likeDao()
+
 }
