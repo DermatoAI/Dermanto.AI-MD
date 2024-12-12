@@ -12,7 +12,15 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun dermatoEndpoint(): DermatoEndpoint = DermatoClient.service
+    fun dermatoEndpoint1(): DermatoAnalyzeEndpoint = DermatoClient.analyzeService
+
+    @Provides
+    @Singleton
+    fun dermatoEndpoint2(): DermatoBackendEndpoint = DermatoClient.backendService
+
+    @Provides
+    @Singleton
+    fun dermatoEndpoint3(): DermatoChatBotEndpoint = DermatoClient.chatbotService
 
     @Provides
     @Singleton

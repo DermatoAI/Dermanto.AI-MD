@@ -71,3 +71,19 @@ data class AppointmentData(
     @SerializedName("appointment_date") val appointmentDate: Date,
     @SerializedName("status") val status: String
 )
+
+data class DoctorsResponse(
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("data")
+    val data: List<Doctors>
+)
+
+data class Doctors(
+    @SerializedName("id")
+    val id: String,
+    @SerializedName("name")
+    val name: String,
+    @SerializedName("address")
+    val address: String
+)

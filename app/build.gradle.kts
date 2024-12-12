@@ -42,8 +42,16 @@ android {
         properties.load(project.rootProject.file("local.properties").inputStream())
 
         buildConfigField(
-            "String", "DERMATO_SERVER_URL",
-            "\"${properties["dermato.server.url"]?.toString()}\""
+            "String", "DERMATO_SERVER_URL_CHATBOT",
+            "\"${properties["dermato.server.url.chatbot"]?.toString()}\""
+        )
+        buildConfigField(
+            "String", "DERMATO_SERVER_URL_ANALYZE",
+            "\"${properties["dermato.server.url.analyze"]?.toString()}\""
+        )
+        buildConfigField(
+            "String", "DERMATO_SERVER_URL_BACKEND",
+            "\"${properties["dermato.server.url.backend"]?.toString()}\""
         )
         buildConfigField(
             "String", "OPENMETEO_SERVER_URL",
