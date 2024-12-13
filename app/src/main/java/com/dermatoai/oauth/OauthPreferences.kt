@@ -10,6 +10,7 @@ import javax.inject.Inject
 
 class OauthPreferences @Inject constructor(private val dataStore: DataStore<Preferences>) {
     private val token = stringPreferencesKey("oauth_state")
+    private val userId = stringPreferencesKey("userId")
     private val profilePicture = stringPreferencesKey("profile_picture_url")
     private val nickname = stringPreferencesKey("nickname")
     private val accountName = stringPreferencesKey("account_name")
@@ -23,6 +24,18 @@ class OauthPreferences @Inject constructor(private val dataStore: DataStore<Pref
     suspend fun saveToken(token: String) {
         dataStore.edit {
             it[this.token] = token
+        }
+    }
+
+    fun getUserId(): Flow<String?> {
+        return dataStore.data.map {
+            it[this.userId]
+        }
+    }
+
+    suspend fun saveUserId(id: String) {
+        dataStore.edit {
+            it[this.userId] = id
         }
     }
 
@@ -66,8 +79,10 @@ class OauthPreferences @Inject constructor(private val dataStore: DataStore<Pref
     suspend fun removeCredential() {
         dataStore.edit {
             it[this.token] = ""
+            it[this.userId] = ""
             it[this.profilePicture] = ""
             it[this.nickname] = ""
+            it[this.accountName] = ""
         }
     }
 

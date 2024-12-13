@@ -33,10 +33,13 @@
         <action
             android:id="@+id/action_home_menu_to_appointmentFragment"
             app:destination="@id/appointment_menu" />
+        <action
+            android:id="@+id/action_homeFragment_to_personalInformationFragment"
+            app:destination="@id/personal_information_menu" />
     </fragment>
     <fragment
         android:id="@+id/forum_menu"
-        android:name="com.dermatoai.ui.ForumFragment"
+        android:name="com.dermatoai.ui.DiscussionFragment"
         android:label="fragment_forum"
         tools:layout="@layout/fragment_forum" >
         <action
@@ -48,6 +51,14 @@
         <action
             android:id="@+id/action_forum_menu_to_appointmentFragment"
             app:destination="@id/appointment_menu" />
+        <action
+            android:id="@+id/action_forumFragment_to_forumDetailMenu"
+            app:destination="@id/forum_detail_menu">
+            <argument android:name="discussionId" app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_forumFragment_to_forumAddMenu"
+            app:destination="@id/forum_add_menu" />
     </fragment>
     <fragment
         android:id="@+id/appointment_menu"
@@ -64,4 +75,21 @@
             android:id="@+id/action_appointmentFragment_to_home_menu"
             app:destination="@id/home_menu" />
     </fragment>
+    <fragment
+        android:id="@+id/forum_detail_menu"
+        android:name="com.dermatoai.ui.DiscussionDetailFragment"
+        android:label="fragment_discussion_detail"
+        tools:layout="@layout/fragment_discussion_detail" />
+
+    <fragment
+        android:id="@+id/forum_add_menu"
+        android:name="com.dermatoai.ui.AddDiscussionFragment"
+        android:label="fragment_discussion_add"
+        tools:layout="@layout/fragment_add_discussion" />
+
+    <fragment
+        android:id="@+id/personal_information_menu"
+        android:name="com.dermatoai.ui.PersonalInformationFragment"
+        android:label="fragment_personal_information"
+        tools:layout="@layout/fragment_personal_information" />
 </navigation>

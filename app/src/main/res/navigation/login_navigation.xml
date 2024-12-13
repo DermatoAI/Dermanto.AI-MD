@@ -21,10 +21,20 @@
         <action
             android:id="@+id/action_birthFragment_to_calledNameFragment"
             app:destination="@id/calledNameFragment" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/calledNameFragment"
         android:name="com.dermatoai.ui.CalledNameFragment"
         android:label="fragment_called_name"
-        tools:layout="@layout/fragment_called_name" />
+        tools:layout="@layout/fragment_called_name" >
+        <argument
+            android:name="userId"
+            app:argType="string" />
+        <argument
+            android:name="birthDate"
+            app:argType="long" />
+    </fragment>
 </navigation>

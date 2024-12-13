@@ -22,11 +22,14 @@ data class DiagnoseRecord(
 
 @Entity(tableName = "appointments")
 data class AppointmentRecord(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey
+    val id: String,
     val time: Date,
+    @ColumnInfo(name = "doctor_id_ref")
+    val doctorId: String,
     @ColumnInfo(name = "doctor_name")
     val doctorName: String,
+    val location: String,
     @ColumnInfo(name = "user_id_ref")
     val userId: String
 )

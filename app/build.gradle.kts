@@ -6,11 +6,13 @@ plugins {
     /*
     added plugins
      */
+    id("kotlin-parcelize")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.dokka")
     id("com.google.gms.google-services")
     id("androidx.room")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -40,12 +42,28 @@ android {
         properties.load(project.rootProject.file("local.properties").inputStream())
 
         buildConfigField(
-            "String", "DERMATO_SERVER_URL",
-            "\"${properties["dermato.server.url"]?.toString()}\""
+            "String", "DERMATO_SERVER_URL_CHATBOT",
+            "\"${properties["dermato.server.url.chatbot"]?.toString()}\""
+        )
+        buildConfigField(
+            "String", "DERMATO_SERVER_URL_ANALYZE",
+            "\"${properties["dermato.server.url.analyze"]?.toString()}\""
+        )
+        buildConfigField(
+            "String", "DERMATO_SERVER_URL_BACKEND",
+            "\"${properties["dermato.server.url.backend"]?.toString()}\""
         )
         buildConfigField(
             "String", "OPENMETEO_SERVER_URL",
             "\"${properties["openmeteo.server.url"]?.toString()}\""
+        )
+        buildConfigField(
+            "String", "GEMINI_API_KEY",
+            "\"${properties["gemini.api.key"]?.toString()}\""
+        )
+        buildConfigField(
+            "String", "GEMINI_MODEL_TYPE",
+            "\"${properties["gemini.model.type"]?.toString()}\""
         )
     }
 
@@ -70,7 +88,9 @@ android {
         schemaDirectory("$projectDir/schemas")
     }
 }
-
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -129,7 +149,13 @@ dependencies {
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
 
+    implementation(libs.circleimageview)
+
     implementation(libs.lottie)
+
+    implementation(libs.generativeai)
+
+    implementation(libs.core)
 }
 /*
 configure dokka

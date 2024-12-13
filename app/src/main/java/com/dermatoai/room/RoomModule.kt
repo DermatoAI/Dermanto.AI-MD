@@ -20,7 +20,8 @@ class RoomModule {
             context,
             DermatoDatabase::class.java,
             "app_database"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides
@@ -30,5 +31,9 @@ class RoomModule {
     @Provides
     fun provideAppointmentRecordDao(database: DermatoDatabase): AppointmentRecordDAO =
         database.appointmentRecordDao()
+
+    @Provides
+    fun provideLikeDao(database: DermatoDatabase): LikesDao =
+        database.likeDao()
 
 }
