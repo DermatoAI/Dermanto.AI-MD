@@ -32,7 +32,7 @@ class GoogleAuthenticationRepository @Inject constructor(
         }
     }
 
-    fun saveUserId(): Flow<String?> {
+    fun getUserId(): Flow<String?> {
         return preferences.getUserId()
     }
 

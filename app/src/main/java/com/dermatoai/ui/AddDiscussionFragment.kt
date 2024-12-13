@@ -12,25 +12,32 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.dermatoai.databinding.FragmentAddDiscussionBinding
 import com.dermatoai.model.AddDiscussionViewModel
-import com.google.firebase.auth.FirebaseAuth
+import com.dermatoai.oauth.GoogleAuthenticationRepository
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.InputStream
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddDiscussionFragment : Fragment() {
 
+    @Inject
+    lateinit var oauthPreferences: GoogleAuthenticationRepository
+
     private lateinit var binding: FragmentAddDiscussionBinding
     private val viewModel: AddDiscussionViewModel by viewModels()
     private var selectedImageUri: Uri? = null
+
+    private lateinit var userid: String
 
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
@@ -53,6 +60,13 @@ class AddDiscussionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewLifecycleOwner.lifecycleScope.launch {
+            oauthPreferences.getUserId().collect {
+                if (it != null) {
+                    userid = it.substringBefore("@")
+                }
+            }
+        }
 
         binding.btnSelectImage.setOnClickListener {
             imagePickerLauncher.launch("image/*")
@@ -66,7 +80,13 @@ class AddDiscussionFragment : Fragment() {
             val judul = binding.etTitle.text.toString()
             val isi = binding.etDescription.text.toString()
             val kategori = binding.etCategory.text.toString()
-            val idPengguna = FirebaseAuth.getInstance().uid.orEmpty()
+            val idPengguna = if (::userid.isInitialized) {
+                userid
+            } else {
+                Toast.makeText(requireContext(), "User ID not initialized", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
+            }
 
             if (judul.isBlank() || isi.isBlank() || kategori.isBlank()) {
                 Toast.makeText(requireContext(), "All fields are required", Toast.LENGTH_SHORT)
