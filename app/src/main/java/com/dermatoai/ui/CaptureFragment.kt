@@ -147,6 +147,7 @@ class CaptureFragment : Fragment() {
                     captureButton.setImageResource(0)
                 }
                 cameraSetup()
+                imageUri = null
                 resetButton.visibility = GONE
             }
 

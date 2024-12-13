@@ -41,7 +41,7 @@ import java.util.Locale
 class AppointmentFragment : Fragment() {
     private var currentAppointment: AppointmentData? = null
     private var doctors: List<Doctor>? = null
-    private var arrayAdapter: ArrayAdapter<String?>? = null
+    private lateinit var arrayAdapter: ArrayAdapter<String?>
     private lateinit var dialog: Dialog
     private lateinit var binding: FragmentAppointmentBinding
     private val viewModel: AppointmentViewModel by viewModels()
@@ -152,7 +152,12 @@ class AppointmentFragment : Fragment() {
         window?.attributes = layoutParams
 
         val doctorNameInput = dialog.findViewById<AutoCompleteTextView>(R.id.doctor_name_input)
-        doctorNameInput.setAdapter(arrayAdapter)
+        if (::arrayAdapter.isInitialized) {
+            doctorNameInput.setAdapter(arrayAdapter)
+        } else {
+            Toast.makeText(requireContext(), "No doctors found", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val button = dialog.findViewById<MaterialButton>(R.id.create_appointment_button)
 
