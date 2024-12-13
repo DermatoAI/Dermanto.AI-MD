@@ -31,18 +31,24 @@ class ChatAiViewModel @Inject constructor(
     }
 
     suspend fun requestChatbot(senderMessage: String) {
-        repository.requestChatbot(ChatRequest(senderMessage)).also { response ->
-            response.message?.let {
-                withContext(Dispatchers.Main) {
+        try {
 
-                    addMessage(ChatData(it, false, Date()))
+            repository.requestChatbot(ChatRequest(senderMessage)).also { response ->
+                response.message?.let {
+                    withContext(Dispatchers.Main) {
+                        addMessage(ChatData(it, false, Date()))
+                    }
+                }
+                response.error?.let {
+                    withContext(Dispatchers.Main) {
+
+                        addMessage(ChatData(it, false, Date()))
+                    }
                 }
             }
-            response.error?.let {
-                withContext(Dispatchers.Main) {
-
-                    addMessage(ChatData(it, false, Date()))
-                }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                addMessage(ChatData("Something went wrong \nplease try again", false, Date()))
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.dermatoai.room
 
+import androidx.room.AutoMigration
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Insert
@@ -7,6 +8,7 @@ import androidx.room.Query
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
+import androidx.room.migration.AutoMigrationSpec
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
@@ -15,10 +17,17 @@ import java.util.Date
         DiagnoseRecord::class,
         AppointmentRecord::class,
         LikesEntity::class
-    ], version = 4, exportSchema = false
+    ],
+    autoMigrations = [
+        AutoMigration(from = 5, to = 6, spec = DermatoDatabase.Migration4To5::class)
+    ], version = 6,
+    exportSchema = true
 )
 @TypeConverters(Converters::class)
 abstract class DermatoDatabase : RoomDatabase() {
+
+    class Migration4To5 : AutoMigrationSpec
+
     abstract fun diagnoseRecordDao(): DiagnoseRecordDAO
     abstract fun appointmentRecordDao(): AppointmentRecordDAO
     abstract fun likeDao(): LikesDao
