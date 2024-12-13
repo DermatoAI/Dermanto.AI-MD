@@ -1,8 +1,9 @@
-package com.dermatoai.ui.adapter
+package com.dermatoai.helper
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,9 @@ class ImageListAdapter(private val context: Context, private val dataList: List<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val imageUrl = dataList[position]
+        if (imageUrl.isNotEmpty()){
+            holder.imageView.visibility = GONE
+        }
         Glide.with(holder.itemView.context).load(imageUrl).into(holder.imageView)
     }
 

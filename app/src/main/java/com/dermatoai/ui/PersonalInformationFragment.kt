@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.dermatoai.R
-import com.dermatoai.ui.adapter.PersonalInfoPagerAdapter
+import com.dermatoai.helper.PersonalInfoPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth

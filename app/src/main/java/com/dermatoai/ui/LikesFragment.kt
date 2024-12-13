@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentLikesBinding
+import com.dermatoai.helper.LikesAdapter
 import com.dermatoai.model.LikesViewModel
-import com.dermatoai.ui.adapter.LikesAdapter
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

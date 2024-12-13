@@ -1,12 +1,12 @@
 package com.dermatoai.ui
 
 import android.content.ContentResolver
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,10 +20,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.InputStream
-import java.io.OutputStream
-import java.nio.channels.FileChannel
 
 @AndroidEntryPoint
 class AddDiscussionFragment : Fragment() {
@@ -32,14 +32,16 @@ class AddDiscussionFragment : Fragment() {
     private val viewModel: AddDiscussionViewModel by viewModels()
     private var selectedImageUri: Uri? = null
 
-    private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        if (uri != null) {
-            selectedImageUri = uri
-            binding.ivSelectedImage.setImageURI(uri)
-        } else {
-            Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
+    private val imagePickerLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            if (uri != null) {
+                selectedImageUri = uri
+                binding.ivSelectedImage.visibility = VISIBLE
+                binding.ivSelectedImage.setImageURI(uri)
+            } else {
+                Toast.makeText(requireContext(), "No image selected", Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +58,10 @@ class AddDiscussionFragment : Fragment() {
             imagePickerLauncher.launch("image/*")
         }
 
+        binding.btnCancel.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
         binding.btnSubmit.setOnClickListener {
             val judul = binding.etTitle.text.toString()
             val isi = binding.etDescription.text.toString()
@@ -63,14 +69,15 @@ class AddDiscussionFragment : Fragment() {
             val idPengguna = FirebaseAuth.getInstance().uid.orEmpty()
 
             if (judul.isBlank() || isi.isBlank() || kategori.isBlank()) {
-                Toast.makeText(requireContext(), "All fields are required", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "All fields are required", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
-            val judulPart = RequestBody.create("text/plain".toMediaTypeOrNull(), judul)
-            val isiPart = RequestBody.create("text/plain".toMediaTypeOrNull(), isi)
-            val kategoriPart = RequestBody.create("text/plain".toMediaTypeOrNull(), kategori)
-            val idPenggunaPart = RequestBody.create("text/plain".toMediaTypeOrNull(), idPengguna)
+            val judulPart = judul.toRequestBody("text/plain".toMediaTypeOrNull())
+            val isiPart = isi.toRequestBody("text/plain".toMediaTypeOrNull())
+            val kategoriPart = kategori.toRequestBody("text/plain".toMediaTypeOrNull())
+            val idPenggunaPart = idPengguna.toRequestBody("text/plain".toMediaTypeOrNull())
 
             val filePart = selectedImageUri?.let {
                 val file = getFileFromUri(it)
@@ -78,7 +85,7 @@ class AddDiscussionFragment : Fragment() {
                     MultipartBody.Part.createFormData(
                         "file",
                         f.name,
-                        RequestBody.create("image/*".toMediaTypeOrNull(), f)
+                        f.asRequestBody("image/*".toMediaTypeOrNull())
                     )
                 }
             }

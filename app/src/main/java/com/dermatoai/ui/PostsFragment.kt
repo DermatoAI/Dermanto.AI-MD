@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentPostBinding
+import com.dermatoai.helper.PostAdapter
 import com.dermatoai.model.DiscussionViewModel
-import com.dermatoai.ui.adapter.PostAdapter
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -41,17 +41,7 @@ class PostsFragment : Fragment() {
                 viewModel.deleteDiscussion(discussionId, FirebaseAuth.getInstance().uid.orEmpty(), false)
             },
             onItemClick = {
-//                <fragment
-//                android:id="@+id/discussionDetailFragment"
-//                android:name="DiscussionDetailFragment"
-//                android:label="Discussion Detail"
-//                tools:layout="@layout/fragment_discussion_detail">
-//                <argument
-//                android:name="discussionId"
-//                app:argType="integer" />
-//                </fragment>
-//                val action = DiscussionFragmentDirections.actionDiscussionFragmentToDiscussionDetailFragment(discussionId)
-//                findNavController().navigate(action)
+
             }
         )
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())

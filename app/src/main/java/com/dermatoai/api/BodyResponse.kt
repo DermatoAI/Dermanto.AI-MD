@@ -142,7 +142,7 @@ data class Diskusi(
     @SerializedName("authorId") val authorId: String,
     @SerializedName("createdAt") val createdAt: TimeStamp?,
     @SerializedName("jumlah_komentar") val jumlahKomentar: Int,
-    @SerializedName("image") val images: String,
+    @SerializedName("image") val images: String?,
     @Ignore val isFavorite: Boolean = false
 ) {
     val timestamp: String = convertTimestamp(createdAt?.seconds ?: 0L)

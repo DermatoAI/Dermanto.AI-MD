@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.dermatoai.R
 import com.dermatoai.databinding.FragmentDiscussionDetailBinding
+import com.dermatoai.helper.CommentAdapter
+import com.dermatoai.helper.ImageListAdapter
 import com.dermatoai.model.DiscussionDetailViewModel
-import com.dermatoai.ui.adapter.CommentAdapter
-import com.dermatoai.ui.adapter.ImageListAdapter
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,11 +72,17 @@ class DiscussionDetailFragment : Fragment() {
                             ContextCompat.getDrawable(requireContext(), R.drawable.ic_unfavorite)
                         }
                     )
-                    val imageAdapter = ImageListAdapter(requireContext(), listOf(it.images))
-                    binding.post.rvImages.layoutManager =
-                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                    binding.post.rvImages.adapter = imageAdapter
-                    adapter.submitList(listOf(detail))
+                    it.images?.let { uris ->
+                        val imageAdapter = ImageListAdapter(requireContext(), listOf(uris))
+                        binding.post.rvImages.layoutManager =
+                            LinearLayoutManager(
+                                requireContext(),
+                                LinearLayoutManager.HORIZONTAL,
+                                false
+                            )
+                        binding.post.rvImages.adapter = imageAdapter
+                        adapter.submitList(listOf(detail))
+                    }
                 }
             }
         }

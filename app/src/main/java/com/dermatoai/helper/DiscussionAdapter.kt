@@ -1,4 +1,4 @@
-package com.dermatoai.ui.adapter
+package com.dermatoai.helper
 
 import android.view.LayoutInflater
 import android.view.View
@@ -74,10 +74,12 @@ class DiscussionAdapter(
             itemView.rootView.setOnClickListener {
                 onItemClick(item)
             }
-            val adapter = ImageListAdapter(itemView.context, listOf(item.images))
-            rvImages.layoutManager =
-                LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-            rvImages.adapter = adapter
+            item.images?.let {
+                val adapter = ImageListAdapter(itemView.context, listOf(item.images))
+                rvImages.layoutManager =
+                    LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+                rvImages.adapter = adapter
+            }
         }
     }
 

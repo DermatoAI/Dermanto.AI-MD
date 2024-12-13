@@ -11,8 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dermatoai.databinding.FragmentForumBinding
+import com.dermatoai.helper.DiscussionAdapter
 import com.dermatoai.model.DiscussionViewModel
-import com.dermatoai.ui.adapter.DiscussionAdapter
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

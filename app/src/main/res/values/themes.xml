@@ -39,6 +39,10 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+    <style name="ImageView.Rounded.Cube" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20%</item>
+    </style>
 
     <style name="SenderChatStyle" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>

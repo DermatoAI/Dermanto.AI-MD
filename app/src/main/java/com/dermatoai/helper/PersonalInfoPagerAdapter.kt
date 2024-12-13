@@ -1,4 +1,4 @@
-package com.dermatoai.ui.adapter
+package com.dermatoai.helper
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter

@@ -1,4 +1,4 @@
-package com.dermatoai.ui.adapter
+package com.dermatoai.helper
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
